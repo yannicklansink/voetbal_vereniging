@@ -14,6 +14,7 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class SpelerController {
 
+    // moet niet elke methode een ResponseEntity<> terug geven?
     private SpelerService service;
 
     @Autowired
@@ -41,7 +42,7 @@ public class SpelerController {
 
     @PutMapping(value = "/speler/{id}")
     public ResponseEntity<Object> putSpelerById(@RequestBody Speler speler, @PathVariable int id) {
-        service.updateSpelerById(speler);
+        service.updateSpelerById(speler, id);
         return ResponseEntity.noContent().build();
     }
 
