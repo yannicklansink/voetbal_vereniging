@@ -16,4 +16,12 @@ public class Speler {
     @GeneratedValue
     private int id;
 
+    private String name;
+
+    public Speler(int id, String name) {
+        this.name = name;
+    }
+
+    public Speler() {
+    }
 }
