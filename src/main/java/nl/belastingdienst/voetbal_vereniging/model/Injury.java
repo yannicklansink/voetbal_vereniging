@@ -5,11 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Scheidsrechter {
+public class Injury {
 
     @Id
     @GeneratedValue
     private int id;
-
 
 }
