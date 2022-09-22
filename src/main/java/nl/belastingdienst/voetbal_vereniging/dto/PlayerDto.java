@@ -13,7 +13,6 @@ public class PlayerDto {
 
     private String playerName;
 
-    @NonNull
     private String street;
 
     private int houseNumber;

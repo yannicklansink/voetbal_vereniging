@@ -1,5 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +16,7 @@ public class Training {
     private int id;
 
     @OneToMany(mappedBy = "training")
-    private List<Player> playerList;
+    private List<PlayerHasTraining> trainings;
 
 
 
