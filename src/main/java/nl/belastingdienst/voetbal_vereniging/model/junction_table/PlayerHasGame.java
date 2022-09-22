@@ -2,16 +2,16 @@ package nl.belastingdienst.voetbal_vereniging.model.junction_table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.belastingdienst.voetbal_vereniging.model.Game;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.Training;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @Entity
-public class PlayerHasTraining {
+public class PlayerHasGame {
 
     @Id
     @GeneratedValue
@@ -22,15 +22,9 @@ public class PlayerHasTraining {
     private Player player;
 
     @ManyToOne
-    @JoinColumn(name = "training_id", insertable = false, updatable = false)
-    private Training training;
+    @JoinColumn(name = "game_id", insertable = false, updatable = false)
+    private Game game;
 
-    private boolean isAanwezig; // boolean standard value = false
-
-    @Column(length=350, nullable=true, unique=false)
-    private String reasonForAbsent;
-
-    private Date date;
 
 
 }

@@ -2,14 +2,13 @@ package nl.belastingdienst.voetbal_vereniging.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import nl.belastingdienst.voetbal_vereniging.model.Gender;
+import nl.belastingdienst.voetbal_vereniging.util.Gender;
 
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class PlayerDto {
+public class PlayerDto implements DtoEntity {
 
     private String playerName;
 

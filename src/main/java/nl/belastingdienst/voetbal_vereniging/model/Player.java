@@ -1,9 +1,13 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasGame;
 import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
+import nl.belastingdienst.voetbal_vereniging.util.Gender;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
@@ -27,11 +31,9 @@ public class Player {
 
     private String postalCode;
 
-    @Transient
-    private int age;
-
     // Temporal: solves converting the date and time values from Java object to compatible database type
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthDate;
 
     @Enumerated(EnumType.STRING)
@@ -40,12 +42,21 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private List<PlayerHasTraining> players;
 
-    public Player(String playerName, String street, int houseNumber, String postalCode, int age, Date birthDate, Gender gender) {
+    @OneToMany(mappedBy = "player")
+    private List<PlayerHasGame> games;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    @OneToMany(mappedBy = "player")
+    private List<Injury> injury;
+
+    public Player(String playerName, String street, int houseNumber, String postalCode, Date birthDate, Gender gender) {
         this.playerName = playerName;
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
-        this.age = age;
         this.birthDate = birthDate;
         this.gender = gender;
     }
