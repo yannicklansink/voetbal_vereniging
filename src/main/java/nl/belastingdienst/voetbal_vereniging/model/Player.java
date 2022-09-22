@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
 import lombok.*;
+import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +38,7 @@ public class Player {
     private Gender gender;
 
     @OneToMany(mappedBy = "player")
-    private List<Training> trainingList;
+    private List<PlayerHasTraining> players;
 
     public Player(String playerName, String street, int houseNumber, String postalCode, int age, Date birthDate, Gender gender) {
         this.playerName = playerName;
