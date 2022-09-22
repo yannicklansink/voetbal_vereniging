@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
+import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.service.PlayerService;
@@ -31,17 +32,17 @@ public class PlayerController {
     public PlayerController() {
     }
 
-    @GetMapping(value = "/spelers")
-    public ResponseEntity<List<PlayerDto>> getAllSpelers() {
-        List<PlayerDto> playerDtos = service.getAllSpelers();
+    @GetMapping(value = "/players")
+    public ResponseEntity<List<DtoEntity>> getAllSpelers() {
+        List<DtoEntity> playerDtos = service.getAllSpelers();
         if(playerDtos.isEmpty()){
             // optional to use HttpStatus.NOT_FOUND as response code
-            return new ResponseEntity<List<PlayerDto>>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(playerDtos, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/speler/{id}")
+    @GetMapping(value = "/player/{id}")
     public ResponseEntity<PlayerDto> getSpelerById(@PathVariable int id) {
 //        return service.getSpelerById(id);
         System.out.println("Fetching player with id " + id);
@@ -55,7 +56,7 @@ public class PlayerController {
 
     // VRAAG: moet de gebruiker bij een POST-request een DTO of model meegeven?
     // @Valid: When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
-    @PostMapping(value = "/speler")
+    @PostMapping(value = "/player")
     public ResponseEntity<String> postSpeler(@Valid @RequestBody PlayerDto playerDto, BindingResult br) {
         System.out.println("Creating player " + playerDto.getPlayerName());
         StringBuilder sb = new StringBuilder();
@@ -74,7 +75,7 @@ public class PlayerController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(value = "/speler/{id}")
+    @PutMapping(value = "/player/{id}")
     public ResponseEntity<String> putSpelerById(@Valid @RequestBody PlayerDto playerDto, @PathVariable int id, BindingResult br) {
         StringBuilder sb = new StringBuilder();
         if(br.hasErrors()){
@@ -87,12 +88,12 @@ public class PlayerController {
         }
 
         System.out.println("Updating Player " + id);
-        service.updateSpelerById(playerDto, id);
+        service.updatePlayerById(playerDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
-    @DeleteMapping(value = "/speler/{id}")
+    @DeleteMapping(value = "/player/{id}")
     public ResponseEntity<PlayerDto> deleteSpeler(@PathVariable int id) {
         System.out.println("Fetching & Deleting User with id " + id);
 

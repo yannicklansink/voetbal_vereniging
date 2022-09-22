@@ -1,9 +1,11 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
+import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerRepository;
+import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,7 @@ public class PlayerService {
         this.repository = repository;
     }
 
-
-    public List<PlayerDto> getAllSpelers() {
+    public List<DtoEntity> getAllSpelers() {
         if (repository.count() != 0) {
             return repository.findAll()
                     .stream()
@@ -32,8 +33,6 @@ public class PlayerService {
             throw new RecordNotFoundException("There are no players in the database");
         }
     }
-
-
 
     public Optional<PlayerDto> getSpelerById(int id) {
         Optional<PlayerDto> newSpeler = Optional.empty();
@@ -47,13 +46,13 @@ public class PlayerService {
 
 
     public Player addNewSpeler(PlayerDto playerDto) {
-        return repository.save(convertDtoToSpeler(playerDto));
+        return repository.save(convertDtoToPlayer(playerDto));
     }
 
-    public boolean updateSpelerById(PlayerDto playerDto, int id) {
+    public boolean updatePlayerById(PlayerDto playerDto, int id) {
         if (checkIfIdExists(id)) {
-            Optional<Player> speler = repository.findById(id);
-            repository.save(speler.get());
+            Player updatedPlayer = convertDtoToExistingPlayer(playerDto, repository.findById(id).get());
+            repository.save(updatedPlayer);
             return true;
         }
         return false;
@@ -76,37 +75,53 @@ public class PlayerService {
         }
     }
 
-    private PlayerDto convertSpelerToDto(Player player) {
-        PlayerDto playerDto = new PlayerDto();
-        playerDto.setPlayerName(player.getPlayerName());
-        playerDto.setAge(player.getAge());
-        playerDto.setGender(player.getGender());
-        playerDto.setStreet(player.getStreet());
-        playerDto.setHouseNumber(player.getHouseNumber());
-        playerDto.setBirthDate(player.getBirthDate());
-        playerDto.setPostalCode(player.getPostalCode());
-        return playerDto;
+    private DtoEntity convertSpelerToDto(Player player) {
+//        PlayerDto playerDto = new PlayerDto();
+        System.out.println("----- converting player to dto ------");
+        return new DtoUtils().convertToDto(player, new PlayerDto());
+//        playerDto.setPlayerName(player.getPlayerName());
+//        playerDto.setAge(player.getAge());
+//        playerDto.setGender(player.getGender());
+//        playerDto.setStreet(player.getStreet());
+//        playerDto.setHouseNumber(player.getHouseNumber());
+//        playerDto.setBirthDate(player.getBirthDate());
+//        playerDto.setPostalCode(player.getPostalCode());
+//        return playerDto;
     }
 
-    private Optional<PlayerDto> convertSpelerToDto(Optional<Player> speler) {
-        PlayerDto playerDto = new PlayerDto();
-        playerDto.setPlayerName(speler.get().getPlayerName());
-        playerDto.setGender(speler.get().getGender());
-        playerDto.setAge(speler.get().getAge());
-        playerDto.setStreet(speler.get().getStreet());
-        playerDto.setBirthDate(speler.get().getBirthDate());
-        playerDto.setHouseNumber(speler.get().getHouseNumber());
-        playerDto.setPostalCode(speler.get().getPostalCode());
-        Optional<PlayerDto> oDto = Optional.of(playerDto);
-        return oDto;
+    private Optional<PlayerDto> convertSpelerToDto(Optional<Player> player) {
+        System.out.println("----- converting player optional to playerDto optional ------");
+        PlayerDto playerDto = (PlayerDto) new DtoUtils().convertToDto(player.get(), new PlayerDto());
+        return Optional.of(playerDto);
+
+//        playerDto.setPlayerName(speler.get().getPlayerName());
+//        playerDto.setGender(speler.get().getGender());
+//        playerDto.setAge(speler.get().getAge());
+//        playerDto.setStreet(speler.get().getStreet());
+//        playerDto.setBirthDate(speler.get().getBirthDate());
+//        playerDto.setHouseNumber(speler.get().getHouseNumber());
+//        playerDto.setPostalCode(speler.get().getPostalCode());
+//        Optional<PlayerDto> oDto = Optional.of(playerDto);
+//        return oDto;
     }
 
     // Is dit wel mogelijk? Want er zou informatie kunnen ontbreken in een DTO
-    private Player convertDtoToSpeler(PlayerDto playerDto){
-        Player player = new Player();
-        player.setPlayerName(playerDto.getPlayerName());
+    private Player convertDtoToPlayer(PlayerDto playerDto){
+        return (Player) new DtoUtils().convertToEntity(new Player(), playerDto);
+    }
 
-        return player;
+    private Player convertDtoToExistingPlayer(PlayerDto playerDto, Player player) {
+        Player newPlayer = convertDtoToPlayer(playerDto);
+        newPlayer.setPlayerId(player.getPlayerId());
+        return newPlayer;
+//        player.setPlayerName(dto.getPlayerName());
+//        player.setAge(dto.getAge());
+//        player.setGender(dto.getGender());
+//        player.setStreet(dto.getStreet());
+//        player.setHouseNumber(dto.getHouseNumber());
+//        player.setBirthDate(dto.getBirthDate());
+//        player.setPostalCode(dto.getPostalCode());
+//        return player;
     }
 
 
