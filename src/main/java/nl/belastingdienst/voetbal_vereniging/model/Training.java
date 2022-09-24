@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
@@ -17,6 +18,8 @@ public class Training {
     @GeneratedValue
     private int id;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date;
 
     @OneToMany(mappedBy = "training")

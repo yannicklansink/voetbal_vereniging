@@ -17,11 +17,12 @@ public class Trainer {
     private int id;
 
     @Column(length=50, nullable=false, unique=false)
-    @NotBlank(message = "Referee name is mandatory")
-    private String refereeName;
+    @NotBlank(message = "Trainer name is mandatory")
+    private String trainerName;
 
     private String street;
 
+    @Column(nullable = true)
     private int houseNumber;
 
     private String postalCode;
@@ -36,8 +37,8 @@ public class Trainer {
     @OneToMany(mappedBy = "trainer")
     private List<Game> games;
 
-    public Trainer(String refereeName, String street, int houseNumber, String postalCode) {
-        this.refereeName = refereeName;
+    public Trainer(String trainerName, String street, int houseNumber, String postalCode) {
+        this.trainerName = trainerName;
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;

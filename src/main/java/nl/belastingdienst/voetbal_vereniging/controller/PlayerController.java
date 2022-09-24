@@ -21,7 +21,6 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class PlayerController {
 
-    // moet niet elke methode een ResponseEntity<> terug geven?
     private PlayerService service;
 
     @Autowired
