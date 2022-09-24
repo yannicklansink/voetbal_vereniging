@@ -27,6 +27,7 @@ public class Player {
 
     private String street;
 
+    @Column(nullable = true)
     private int houseNumber;
 
     private String postalCode;

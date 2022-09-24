@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model.junction_table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
@@ -25,11 +26,13 @@ public class PlayerHasTraining {
     @JoinColumn(name = "training_id", insertable = false, updatable = false)
     private Training training;
 
-    private boolean isAanwezig; // boolean standard value = false
+    private boolean isPresent; // boolean standard value = false
 
     @Column(length=350, nullable=true, unique=false)
     private String reasonForAbsent;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date;
 
 
