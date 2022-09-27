@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.Game;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
+import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.model.Training;
 
 import javax.persistence.*;
@@ -24,6 +25,10 @@ public class PlayerHasGame {
     @ManyToOne
     @JoinColumn(name = "game_id", insertable = false, updatable = false)
     private Game game;
+
+    @ManyToOne
+    @JoinColumn(name = "trainer_id", insertable = false, updatable = false)
+    private Trainer trainer;
 
 
 

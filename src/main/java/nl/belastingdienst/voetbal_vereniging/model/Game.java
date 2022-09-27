@@ -27,9 +27,9 @@ public class Game {
     @NotBlank(message = "Opponent is mandatory")
     private String opponent;
 
-    @ManyToOne
-    @JoinColumn(name = "trainer_id")
-    private Trainer trainer;
+//    @ManyToOne
+//    @JoinColumn(name = "trainer_id")
+//    private Trainer trainer;
 
     @ManyToOne
     @JoinColumn(name = "referee_id")
@@ -38,9 +38,11 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private List<PlayerHasGame> games;
 
-    public Game(Date date, String opponent) {
+    public Game(Date date, String opponent, Referee referee, List<PlayerHasGame> games) {
         this.date = date;
         this.opponent = opponent;
+        this.referee = referee;
+        this.games = games;
     }
 
 
