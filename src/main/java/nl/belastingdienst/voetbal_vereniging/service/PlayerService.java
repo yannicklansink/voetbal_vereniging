@@ -66,6 +66,9 @@ public class PlayerService {
         return false;
     }
 
+    /*
+    Method will return a RecordNotFoundException when the Optional object is empty
+     */
     public boolean checkIfIdExists(int id) {
         Optional<Player> newSpeler = repository.findById(id);
         if (newSpeler.isPresent()) {
@@ -76,33 +79,12 @@ public class PlayerService {
     }
 
     private DtoEntity convertSpelerToDto(Player player) {
-//        PlayerDto playerDto = new PlayerDto();
-        System.out.println("----- converting player to dto ------");
         return new DtoUtils().convertToDto(player, new PlayerDto());
-//        playerDto.setPlayerName(player.getPlayerName());
-//        playerDto.setAge(player.getAge());
-//        playerDto.setGender(player.getGender());
-//        playerDto.setStreet(player.getStreet());
-//        playerDto.setHouseNumber(player.getHouseNumber());
-//        playerDto.setBirthDate(player.getBirthDate());
-//        playerDto.setPostalCode(player.getPostalCode());
-//        return playerDto;
     }
 
     private Optional<PlayerDto> convertSpelerToDto(Optional<Player> player) {
-        System.out.println("----- converting player optional to playerDto optional ------");
         PlayerDto playerDto = (PlayerDto) new DtoUtils().convertToDto(player.get(), new PlayerDto());
         return Optional.of(playerDto);
-
-//        playerDto.setPlayerName(speler.get().getPlayerName());
-//        playerDto.setGender(speler.get().getGender());
-//        playerDto.setAge(speler.get().getAge());
-//        playerDto.setStreet(speler.get().getStreet());
-//        playerDto.setBirthDate(speler.get().getBirthDate());
-//        playerDto.setHouseNumber(speler.get().getHouseNumber());
-//        playerDto.setPostalCode(speler.get().getPostalCode());
-//        Optional<PlayerDto> oDto = Optional.of(playerDto);
-//        return oDto;
     }
 
     // Is dit wel mogelijk? Want er zou informatie kunnen ontbreken in een DTO
@@ -114,14 +96,6 @@ public class PlayerService {
         Player newPlayer = convertDtoToPlayer(playerDto);
         newPlayer.setPlayerId(player.getPlayerId());
         return newPlayer;
-//        player.setPlayerName(dto.getPlayerName());
-//        player.setAge(dto.getAge());
-//        player.setGender(dto.getGender());
-//        player.setStreet(dto.getStreet());
-//        player.setHouseNumber(dto.getHouseNumber());
-//        player.setBirthDate(dto.getBirthDate());
-//        player.setPostalCode(dto.getPostalCode());
-//        return player;
     }
 
 
