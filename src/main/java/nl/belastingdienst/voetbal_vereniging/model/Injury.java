@@ -13,7 +13,11 @@ import java.util.Date;
 public class Injury {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_injury")
+    @SequenceGenerator(
+            name = "seq_injury",
+            initialValue = 1
+    )
     private int id;
 
     @Temporal(TemporalType.DATE)

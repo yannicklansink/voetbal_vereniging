@@ -18,7 +18,11 @@ import java.util.List;
 public class Player {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_player")
+    @SequenceGenerator(
+            name = "seq_player",
+            initialValue = 1
+    )
     private int playerId;
 
     @Column(length=50, nullable=false, unique=false)

@@ -14,7 +14,11 @@ import java.util.List;
 public class Trainer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_trainer")
+    @SequenceGenerator(
+            name = "seq_trainer",
+            initialValue = 1
+    )
     private int id;
 
     @Column(length=50, nullable=false, unique=false)

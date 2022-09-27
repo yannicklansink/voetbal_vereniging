@@ -15,7 +15,11 @@ import java.util.List;
 public class Training {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_training")
+    @SequenceGenerator(
+            name = "seq_training",
+            initialValue = 1
+    )
     private int id;
 
     @Temporal(TemporalType.DATE)

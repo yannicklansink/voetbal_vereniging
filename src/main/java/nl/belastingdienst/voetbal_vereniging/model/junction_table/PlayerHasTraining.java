@@ -15,7 +15,11 @@ import java.util.Date;
 public class PlayerHasTraining {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playertraining")
+    @SequenceGenerator(
+            name = "seq_playertraining",
+            initialValue = 1
+    )
     private int id;
 
     @ManyToOne
