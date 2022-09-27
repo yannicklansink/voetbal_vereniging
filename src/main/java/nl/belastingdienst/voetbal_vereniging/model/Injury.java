@@ -30,14 +30,10 @@ public class Injury {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    public Injury(Date startDate, Date endDate, String explanation) {
+    public Injury(Date startDate, Date endDate, String explanation, Player player) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.explanation = explanation;
-    }
-
-    public Injury(Date startDate, Date endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.player = player;
     }
 }
