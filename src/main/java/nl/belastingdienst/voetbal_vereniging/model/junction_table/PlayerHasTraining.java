@@ -26,7 +26,7 @@ public class PlayerHasTraining {
     @JoinColumn(name = "training_id", insertable = false, updatable = false)
     private Training training;
 
-    private boolean isPresent; // boolean standard value = false
+    private boolean isPresent = true;
 
     @Column(length=350, nullable=true, unique=false)
     private String reasonForAbsent;
