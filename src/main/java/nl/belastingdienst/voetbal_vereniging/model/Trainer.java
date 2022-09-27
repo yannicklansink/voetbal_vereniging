@@ -2,6 +2,7 @@ package nl.belastingdienst.voetbal_vereniging.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasGame;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,8 +35,11 @@ public class Trainer {
     @JoinColumn(name = "team_id")
     private Team team;
 
+//    @OneToMany(mappedBy = "trainer")
+//    private List<Game> games;
+
     @OneToMany(mappedBy = "trainer")
-    private List<Game> games;
+    private List<PlayerHasGame> games;
 
     public Trainer(String trainerName, String street, int houseNumber, String postalCode) {
         this.trainerName = trainerName;
