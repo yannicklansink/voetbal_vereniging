@@ -3,7 +3,7 @@ package nl.belastingdienst.voetbal_vereniging.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
-import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasGame;
+import nl.belastingdienst.voetbal_vereniging.model.Team;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -23,12 +23,12 @@ public class GameDto implements  DtoEntity {
 
     private Referee referee;
 
-    private List<PlayerHasGame> games;
+    private Team team;
 
-    public GameDto(Date date, String opponent, Referee referee, List<PlayerHasGame> games) {
+    public GameDto(Date date, String opponent, Referee referee, Team team) {
         this.date = date;
         this.opponent = opponent;
         this.referee = referee;
-        this.games = games;
+        this.team = team;
     }
 }

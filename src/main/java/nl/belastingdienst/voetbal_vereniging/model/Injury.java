@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -20,13 +21,11 @@ public class Injury {
     )
     private int id;
 
-    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date startDate;
+    private LocalDate startDate;
 
-    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date endDate;
+    private LocalDate endDate;
 
     private String explanation;
 
@@ -34,7 +33,7 @@ public class Injury {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    public Injury(Date startDate, Date endDate, String explanation, Player player) {
+    public Injury(LocalDate startDate, LocalDate endDate, String explanation, Player player) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.explanation = explanation;
