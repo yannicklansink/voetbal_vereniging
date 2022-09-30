@@ -13,7 +13,11 @@ import java.util.List;
 public class Referee {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_referee")
+    @SequenceGenerator(
+            name = "seq_referee",
+            initialValue = 1
+    )
     private int id;
 
     @Column(length=50, nullable=false, unique=false)

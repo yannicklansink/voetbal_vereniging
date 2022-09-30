@@ -3,13 +3,11 @@ package nl.belastingdienst.voetbal_vereniging.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasGame;
-import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
 import nl.belastingdienst.voetbal_vereniging.util.Gender;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -18,7 +16,11 @@ import java.util.List;
 public class Player {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_player")
+    @SequenceGenerator(
+            name = "seq_player",
+            initialValue = 1
+    )
     private int playerId;
 
     @Column(length=50, nullable=false, unique=false)
@@ -33,15 +35,15 @@ public class Player {
     private String postalCode;
 
     // Temporal: solves converting the date and time values from Java object to compatible database type
-    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToMany(mappedBy = "player")
-    private List<PlayerHasTraining> players;
+    @ManyToMany(mappedBy = "players")
+    private List<Training> trainings;
+    // add training method?
 
     @OneToMany(mappedBy = "player")
     private List<PlayerHasGame> games;
@@ -53,12 +55,29 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private List<Injury> injury;
 
-    public Player(String playerName, String street, int houseNumber, String postalCode, Date birthDate, Gender gender) {
+    public Player(String playerName, String street, int houseNumber, String postalCode, LocalDate birthDate, Gender gender) {
         this.playerName = playerName;
         this.street = street;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
         this.birthDate = birthDate;
         this.gender = gender;
+    }
+
+    public Player(String playerName, String street, int houseNumber, String postalCode, LocalDate birthDate, Gender gender, Team team) {
+        this.playerName = playerName;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.postalCode = postalCode;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.team = team;
+    }
+
+
+    public Player(String playerName, Gender gender, Team team) {
+        this.playerName = playerName;
+        this.gender = gender;
+        this.team = team;
     }
 }

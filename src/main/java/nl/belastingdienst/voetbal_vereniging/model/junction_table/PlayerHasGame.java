@@ -15,7 +15,11 @@ import javax.persistence.*;
 public class PlayerHasGame {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playergame")
+    @SequenceGenerator(
+            name = "seq_playergame",
+            initialValue = 1
+    )
     private int id;
 
     @ManyToOne
