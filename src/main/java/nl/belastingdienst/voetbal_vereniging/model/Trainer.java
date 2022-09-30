@@ -31,8 +31,8 @@ public class Trainer {
 
     private String postalCode;
 
-    @OneToMany(mappedBy = "trainer")
-    private List<Training> trainings;
+//    @OneToMany(mappedBy = "trainer")
+//    private List<Training> trainings;
 
     @ManyToOne
     @JoinColumn(name = "team_id")

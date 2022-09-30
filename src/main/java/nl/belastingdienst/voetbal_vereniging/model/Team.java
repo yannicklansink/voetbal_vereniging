@@ -22,7 +22,7 @@ public class Team {
     @Column(nullable = false)
     private String teamName;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team")
     private List<Player> players;
 
     @OneToMany(mappedBy = "team")
@@ -30,6 +30,9 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private List<Game> games;
+
+    @OneToMany(mappedBy = "team")
+    private List<Training> trainings;
 
     public Team(String teamName) {
         this.teamName = teamName;

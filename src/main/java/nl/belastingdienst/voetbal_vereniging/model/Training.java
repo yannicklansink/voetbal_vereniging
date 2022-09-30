@@ -3,7 +3,6 @@ package nl.belastingdienst.voetbal_vereniging.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,22 +31,24 @@ public class Training {
 //            inverseJoinColumns = @JoinColumn(name = "training_id", nullable = false)
 //    )
 //    private List<Player> players;
+//
+//    @OneToMany(mappedBy = "training")
+//    private List<PlayerHasTraining> players;
 
-    @OneToMany(mappedBy = "training")
-    private List<PlayerHasTraining> players;
+//    @ManyToOne
+//    @JoinColumn(name = "trainer_id")
+//    private Trainer trainer;
 
     @ManyToOne
-    @JoinColumn(name = "trainer_id")
-    private Trainer trainer;
+    @JoinColumn(name = "team_id")
+    private Team team;
 
-    public Training(LocalDate date, List<PlayerHasTraining> players, Trainer trainer) {
+    public Training(LocalDate date, Team team) {
         this.date = date;
-        this.players = players;
-        this.trainer = trainer;
+        this.team = team;
     }
 
-    public Training(LocalDate date, Trainer trainer) {
+    public Training(LocalDate date) {
         this.date = date;
-        this.trainer = trainer;
     }
 }

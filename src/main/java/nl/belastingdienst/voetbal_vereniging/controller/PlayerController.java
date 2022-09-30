@@ -33,7 +33,7 @@ public class PlayerController {
     }
 
     @GetMapping(value = "/players")
-    public ResponseEntity<List<DtoEntity>> getAllSpelers() {
+    public ResponseEntity<List<DtoEntity>> getAllPlayers() {
         List<DtoEntity> playerDtos = service.getAllSpelers();
         if(playerDtos.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -42,7 +42,7 @@ public class PlayerController {
     }
 
     @GetMapping(value = "/player/{id}")
-    public ResponseEntity<PlayerDto> getSpelerById(@PathVariable int id) {
+    public ResponseEntity<PlayerDto> getPlayerById(@PathVariable int id) {
         Optional<PlayerDto> spelerDto = service.getSpelerById(id);
         if (spelerDto.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ public class PlayerController {
 
     // @Valid: When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
     @PostMapping(value = "/player")
-    public ResponseEntity<String> postSpeler(@Valid @RequestBody PlayerDto playerDto, BindingResult br) {
+    public ResponseEntity<String> postPlayer(@Valid @RequestBody PlayerDto playerDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
         }
@@ -63,7 +63,7 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/player/{id}")
-    public ResponseEntity<String> putSpelerById(@Valid @RequestBody PlayerDto playerDto, @PathVariable int id, BindingResult br) {
+    public ResponseEntity<String> putPlayerById(@Valid @RequestBody PlayerDto playerDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
         }
@@ -73,7 +73,7 @@ public class PlayerController {
     }
 
     @DeleteMapping(value = "/player/{id}")
-    public ResponseEntity<PlayerDto> deleteSpeler(@PathVariable int id) {
+    public ResponseEntity<PlayerDto> deletePlayer(@PathVariable int id) {
         if (service.deleteSpelerById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
