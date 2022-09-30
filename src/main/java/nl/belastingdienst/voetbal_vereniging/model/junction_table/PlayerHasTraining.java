@@ -9,27 +9,27 @@ import nl.belastingdienst.voetbal_vereniging.model.Training;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
-@Entity
-public class PlayerHasTraining {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playertraining")
-    @SequenceGenerator(
-            name = "seq_playertraining",
-            initialValue = 1
-    )
-    private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "player_id", insertable = false, updatable = false)
-    private Player player;
-
-    @ManyToOne
-    @JoinColumn(name = "training_id", insertable = false, updatable = false)
-    private Training training;
-
-
-
-}
+//@Data
+//@NoArgsConstructor
+//@Entity
+//public class PlayerHasTraining {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playertraining")
+//    @SequenceGenerator(
+//            name = "seq_playertraining",
+//            initialValue = 1
+//    )
+//    private int id;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "player_id", insertable = false, updatable = false)
+//    private Player player;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "training_id", insertable = false, updatable = false)
+//    private Training training;
+//
+//
+//
+//}
