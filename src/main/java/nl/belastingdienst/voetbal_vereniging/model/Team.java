@@ -22,7 +22,7 @@ public class Team {
     @Column(nullable = false)
     private String teamName;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Player> players;
 
     @OneToMany(mappedBy = "team")

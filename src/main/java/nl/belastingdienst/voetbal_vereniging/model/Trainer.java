@@ -51,4 +51,13 @@ public class Trainer {
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
     }
+
+    public Trainer(String trainerName, Team team) {
+        this.trainerName = trainerName;
+        this.team = team;
+    }
+
+    public Trainer(String trainerName) {
+        this.trainerName = trainerName;
+    }
 }

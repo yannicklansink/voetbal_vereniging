@@ -3,10 +3,9 @@ package nl.belastingdienst.voetbal_vereniging.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -22,20 +21,29 @@ public class Training {
     )
     private int id;
 
-    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
-    @OneToMany(mappedBy = "training")
-    private List<PlayerHasTraining> trainings;
+    @ManyToMany
+    @JoinTable(
+            name = "training_players",
+            joinColumns = @JoinColumn(name = "player_id "),
+            inverseJoinColumns = @JoinColumn(name = "training_id")
+    )
+    private List<Player> players;
 
     @ManyToOne
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
-    public Training(Date date, List<PlayerHasTraining> trainings, Trainer trainer) {
+    public Training(LocalDate date, List<Player> players, Trainer trainer) {
         this.date = date;
-        this.trainings = trainings;
+        this.players = players;
+        this.trainer = trainer;
+    }
+
+    public Training(LocalDate date, Trainer trainer) {
+        this.date = date;
         this.trainer = trainer;
     }
 }
