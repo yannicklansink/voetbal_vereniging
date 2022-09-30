@@ -3,10 +3,10 @@ package nl.belastingdienst.voetbal_vereniging.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasGame;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,9 +23,8 @@ public class Game {
     )
     private int id;
 
-    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @Column(length=50, nullable=false, unique=false)
     @NotBlank(message = "Opponent is mandatory")
@@ -39,14 +38,15 @@ public class Game {
     @JoinColumn(name = "referee_id")
     private Referee referee;
 
-    @OneToMany(mappedBy = "game")
-    private List<PlayerHasGame> games;
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
-    public Game(Date date, String opponent, Referee referee, List<PlayerHasGame> games) {
+    public Game(LocalDate date, String opponent, Referee referee, Team team) {
         this.date = date;
         this.opponent = opponent;
         this.referee = referee;
-        this.games = games;
+        this.team = team;
     }
 
 

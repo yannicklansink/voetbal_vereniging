@@ -2,7 +2,7 @@ package nl.belastingdienst.voetbal_vereniging.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasGame;
+import nl.belastingdienst.voetbal_vereniging.model.junction_table.PlayerHasTraining;
 import nl.belastingdienst.voetbal_vereniging.util.Gender;
 
 import javax.persistence.*;
@@ -41,12 +41,11 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @ManyToMany(mappedBy = "players")
-    private List<Training> trainings;
-    // add training method?
+//    @ManyToMany(mappedBy = "players")
+//    private List<Training> trainings;
 
     @OneToMany(mappedBy = "player")
-    private List<PlayerHasGame> games;
+    private List<PlayerHasTraining> trainings;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
