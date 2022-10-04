@@ -2,7 +2,7 @@ package nl.belastingdienst.voetbal_vereniging.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.util.Gender;
+import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 
 import java.util.Date;
 
