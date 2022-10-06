@@ -29,7 +29,7 @@ public class Player {
     private String street;
 
     @Column(nullable = true)
-    private int houseNumber;
+    private Integer houseNumber;
 
     private String postalCode;
 

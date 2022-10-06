@@ -14,8 +14,8 @@ public class TeamDto implements DtoEntity{
 
     private String teamName;
 
-    private List<Player> players;
-
-    private List<Trainer> trainers;
+//    private List<PlayerDto> players;
+//
+//    private List<TrainerDto> trainers;
 
 }

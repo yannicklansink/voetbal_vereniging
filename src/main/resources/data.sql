@@ -111,5 +111,16 @@ INSERT INTO game (id, date, opponent, referee_id, team_id) VALUES
                                     (11, '2021-10-28', 'Real Betis', 5, 3),
                                     (12, '2021-10-28', 'Sporting', 2, 4);
 
-INSERT INTO player_data(player_id, height) VALUES
-                              (1, 188);
+-- INSERT INTO player_data(player_id, height) VALUES
+--                               (1, 188);
+
+-- INSERT INTO role(name) VALUES
+--                            ('ROLE_PLAYER'),
+--                            ('ROLE_TRAINER'),
+--                            ('ROLE_CLUBEMPLOYEE');
+
+INSERT INTO authority(id,username,authority)
+VALUES (1, 'baian','ROLE_PLAYER');
+
+INSERT INTO users(username,password,enabled,email)
+VALUES ('baian','$2a$10$C0oa49sVgc2lGmcXUHRGbueX0nT7f2tb1g4wWxdjCD2nukdCOwckW',false,'koolblue');
