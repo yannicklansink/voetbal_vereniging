@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.dto;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class GameDto implements  DtoEntity {
 
     private LocalDate date;
@@ -30,10 +32,4 @@ public class GameDto implements  DtoEntity {
 //    @JsonIgnoreProperties(value = {"games", "players"})
     private TeamDto team;
 
-//    public GameDto(Date date, String opponent, Referee referee, Team team) {
-//        this.date = date;
-//        this.opponent = opponent;
-//        this.referee = referee;
-//        this.team = team;
-//    }
 }

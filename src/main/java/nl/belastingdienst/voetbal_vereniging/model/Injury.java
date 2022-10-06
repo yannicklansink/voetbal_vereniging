@@ -14,12 +14,8 @@ import java.util.Date;
 public class Injury {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_injury")
-    @SequenceGenerator(
-            name = "seq_injury",
-            initialValue = 1
-    )
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;

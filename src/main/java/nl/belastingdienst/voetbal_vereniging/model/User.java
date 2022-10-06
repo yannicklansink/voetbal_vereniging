@@ -29,6 +29,7 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+    @PrimaryKeyJoinColumn
     private Set<Authority> authorities = new HashSet<>();
 
     public Set<Authority> getAuthorities() { return authorities; }

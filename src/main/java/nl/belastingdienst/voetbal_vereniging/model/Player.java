@@ -15,12 +15,8 @@ import java.util.List;
 public class Player {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_player")
-    @SequenceGenerator(
-            name = "seq_player",
-            initialValue = 1
-    )
-    private int playerId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long playerId;
 
     @Column(length=50, nullable=false, unique=false)
     @NotBlank(message = "Player name is mandatory")
@@ -40,8 +36,8 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "player")
+//    @PrimaryKeyJoinColumn
     private PlayerData playerData;
 
     @ManyToOne

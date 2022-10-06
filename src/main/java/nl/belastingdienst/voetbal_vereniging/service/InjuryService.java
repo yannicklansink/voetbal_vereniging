@@ -88,7 +88,7 @@ public class InjuryService {
         return Optional.of(injuryDto);
     }
 
-    private Injury convertDtoToInjury(InjuryDto injuryDto){
+    public static Injury convertDtoToInjury(InjuryDto injuryDto){
         return (Injury) new DtoUtils().convertToEntity(new Injury(), injuryDto);
     }
 

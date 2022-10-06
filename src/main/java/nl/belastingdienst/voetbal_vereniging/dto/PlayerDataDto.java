@@ -1,7 +1,10 @@
-package nl.belastingdienst.voetbal_vereniging.model;
+package nl.belastingdienst.voetbal_vereniging.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.belastingdienst.voetbal_vereniging.model.Player;
+import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Foot;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Position;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Star;
@@ -10,21 +13,10 @@ import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@Entity
-public class PlayerData {
+public class PlayerDataDto implements DtoEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playerdata")
-    @SequenceGenerator(
-            name = "seq_playerdata",
-            initialValue = 1
-    )
-    private int id;
-
-    @OneToOne
-    @JoinColumn(name = "player_id")
-//    @MapsId
-    private Player player;
+    @JsonIgnoreProperties(value = "injury")
+    private PlayerDto player;
 
     private int height;
 
@@ -51,5 +43,4 @@ public class PlayerData {
     private int jumping;
 
     private int passing;
-
 }
