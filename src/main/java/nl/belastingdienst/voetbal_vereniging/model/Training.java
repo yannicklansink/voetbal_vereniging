@@ -24,21 +24,6 @@ public class Training {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "training_players",
-//            joinColumns = @JoinColumn(name = "player_id ", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "training_id", nullable = false)
-//    )
-//    private List<Player> players;
-//
-//    @OneToMany(mappedBy = "training")
-//    private List<PlayerHasTraining> players;
-
-//    @ManyToOne
-//    @JoinColumn(name = "trainer_id")
-//    private Trainer trainer;
-
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;

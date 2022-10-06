@@ -20,5 +20,5 @@ public class RefereeDto implements DtoEntity {
 
     private String postalCode;
 
-    private List<Game> games;
+    private List<GameDto> games;
 }

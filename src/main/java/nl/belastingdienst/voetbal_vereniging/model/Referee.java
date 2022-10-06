@@ -27,7 +27,7 @@ public class Referee {
     private String street;
 
     @Column(nullable = true)
-    private int houseNumber;
+    private Integer houseNumber;
 
     private String postalCode;
 

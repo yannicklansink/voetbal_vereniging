@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,5 +37,10 @@ public class Team {
 
     public Team(String teamName) {
         this.teamName = teamName;
+    }
+
+    @Override
+    public String toString() {
+        return teamName;
     }
 }
