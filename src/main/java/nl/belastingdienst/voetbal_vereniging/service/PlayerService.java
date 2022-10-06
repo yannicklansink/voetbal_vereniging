@@ -1,14 +1,19 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
+import nl.belastingdienst.voetbal_vereniging.controller.InjuryController;
 import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
+import nl.belastingdienst.voetbal_vereniging.dto.InjuryDto;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
+import nl.belastingdienst.voetbal_vereniging.model.Injury;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
+import nl.belastingdienst.voetbal_vereniging.repository.InjuryRepository;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,9 +23,13 @@ public class PlayerService {
 
     private PlayerRepository repository;
 
+    private InjuryRepository injuryRepository;
+
+
     @Autowired
-    public PlayerService(PlayerRepository repository) {
+    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository) {
         this.repository = repository;
+        this.injuryRepository = injuryRepository;
     }
 
     public List<DtoEntity> getAllSpelers() {
@@ -46,7 +55,20 @@ public class PlayerService {
 
 
     public Player addNewSpeler(PlayerDto playerDto) {
-        return repository.save(convertDtoToPlayer(playerDto));
+
+        Player player = repository.save(convertDtoToPlayer(playerDto));
+        Long newPlayerId = player.getPlayerId();
+
+        if (playerDto.getInjury() != null) {
+            System.out.println("player has injuries to save in DB");
+            for (InjuryDto injuryDto : playerDto.getInjury()) {
+                Injury injury = InjuryService.convertDtoToInjury(injuryDto);
+                injury.setPlayer(player);
+                injuryRepository.save(injury);
+            }
+        }
+
+        return player;
     }
 
     public boolean updatePlayerById(PlayerDto playerDto, int id) {

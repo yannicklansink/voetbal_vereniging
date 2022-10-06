@@ -111,8 +111,8 @@ INSERT INTO game (id, date, opponent, referee_id, team_id) VALUES
                                     (11, '2021-10-28', 'Real Betis', 5, 3),
                                     (12, '2021-10-28', 'Sporting', 2, 4);
 
--- INSERT INTO player_data(player_id, height) VALUES
---                               (1, 188);
+INSERT INTO player_data(id, player_id, height, weight, top_speed, prefered_foot, position, work_rate, weak_foot, skill_moves, dribbling, jumping, passing) VALUES
+(1, 1, 188, 75, 33, 'RIGHT', 'LB', 77, null, 'THREE', 88, 70, 80);
 
 -- INSERT INTO role(name) VALUES
 --                            ('ROLE_PLAYER'),

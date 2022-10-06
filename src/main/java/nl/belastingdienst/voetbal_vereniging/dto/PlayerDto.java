@@ -1,10 +1,14 @@
 package nl.belastingdienst.voetbal_vereniging.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import nl.belastingdienst.voetbal_vereniging.model.Injury;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,11 +24,14 @@ public class PlayerDto implements DtoEntity {
 
     private int age;
 
-    private Date birthDate;
+    private LocalDate birthDate;
 
     private Gender gender;
 
-    public PlayerDto(String playerName, String street, int houseNumber, String postalCode, int age, Date birthDate, Gender gender) {
+    @JsonIgnoreProperties(value = "player")
+    private List<InjuryDto> injury;
+
+    public PlayerDto(String playerName, String street, int houseNumber, String postalCode, int age, LocalDate birthDate, Gender gender) {
         this.playerName = playerName;
         this.street = street;
         this.houseNumber = houseNumber;

@@ -37,10 +37,6 @@ public class TrainingController {
         if(trainingDtos.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        for (TrainingDto dto : trainingDtos) {
-            System.out.println(dto.getDate());
-            System.out.println();
-        }
 
         return new ResponseEntity<>(trainingDtos, HttpStatus.OK);
     }

@@ -28,6 +28,10 @@ public class Authority implements GrantedAuthority {
     @Column(nullable = false)
     private String authority;
 
+    @ManyToOne
+    @JoinColumn(name = "user_username")
+    private User user;
+
 
     public Authority(String username, String authority) {
         this.username = username;
