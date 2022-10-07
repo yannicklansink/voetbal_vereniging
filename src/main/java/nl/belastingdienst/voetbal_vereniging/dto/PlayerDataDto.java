@@ -15,12 +15,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class PlayerDataDto implements DtoEntity {
 
-    @JsonIgnoreProperties(value = "injury")
+    @JsonIgnoreProperties(value = {"injury", "playerData"})
     private PlayerDto player;
 
     private int height;
 
-    private int weight;
+    private double weight;
 
     private double topSpeed;
 
@@ -40,7 +40,7 @@ public class PlayerDataDto implements DtoEntity {
 
     private int dribbling;
 
-    private int jumping;
+    private int shooting;
 
     private int passing;
 }

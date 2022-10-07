@@ -31,6 +31,9 @@ public class PlayerDto implements DtoEntity {
     @JsonIgnoreProperties(value = "player")
     private List<InjuryDto> injury;
 
+    @JsonIgnoreProperties(value = "player")
+    private PlayerDataDto playerData;
+
     public PlayerDto(String playerName, String street, int houseNumber, String postalCode, int age, LocalDate birthDate, Gender gender) {
         this.playerName = playerName;
         this.street = street;

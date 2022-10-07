@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Foot;
@@ -14,42 +15,48 @@ import javax.persistence.*;
 public class PlayerData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playerdata")
-    @SequenceGenerator(
-            name = "seq_playerdata",
-            initialValue = 1
-    )
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @OneToOne
     @JoinColumn(name = "player_id")
-//    @MapsId
     private Player player;
 
+    @Column(nullable = true)
     private int height;
 
-    private int weight;
+    @Column(nullable = true)
+    private double weight;
 
+    @Column(nullable = true)
     private double topSpeed;
 
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Foot preferedFoot;
 
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Position position;
 
+    @Column(nullable = true)
     private int workRate;
 
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Star weakFoot;
 
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private Star skillMoves;
 
+    @Column(nullable = true)
     private int dribbling;
 
-    private int jumping;
+    @Column(nullable = true)
+    private int shooting;
 
+    @Column(nullable = true)
     private int passing;
 
 }

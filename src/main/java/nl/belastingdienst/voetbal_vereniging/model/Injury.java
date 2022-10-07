@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class Injury {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
@@ -25,8 +26,9 @@ public class Injury {
 
     private String explanation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id")
+//    @JsonBackReference
     private Player player;
 
     public Injury(LocalDate startDate, LocalDate endDate, String explanation, Player player) {

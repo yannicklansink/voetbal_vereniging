@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 
@@ -16,7 +17,7 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long playerId;
+    private Integer playerId;
 
     @Column(length=50, nullable=false, unique=false)
     @NotBlank(message = "Player name is mandatory")
@@ -36,7 +37,8 @@ public class Player {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne(mappedBy = "player")
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+//    @JsonManagedReference
 //    @PrimaryKeyJoinColumn
     private PlayerData playerData;
 
@@ -44,7 +46,8 @@ public class Player {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonManagedReference
     private List<Injury> injury;
 
     public Player(String playerName, String street, int houseNumber, String postalCode, LocalDate birthDate, Gender gender) {
