@@ -16,8 +16,12 @@ import java.util.List;
 public class Player {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer playerId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_player")
+    @SequenceGenerator(
+            name = "seq_player",
+            initialValue = 50
+    )
+    private int playerId;
 
     @Column(length=50, nullable=false, unique=false)
     @NotBlank(message = "Player name is mandatory")
@@ -46,8 +50,7 @@ public class Player {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     private List<Injury> injury;
 
     public Player(String playerName, String street, int houseNumber, String postalCode, LocalDate birthDate, Gender gender) {
