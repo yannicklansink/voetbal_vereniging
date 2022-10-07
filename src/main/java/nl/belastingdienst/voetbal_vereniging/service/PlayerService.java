@@ -3,11 +3,14 @@ package nl.belastingdienst.voetbal_vereniging.service;
 import nl.belastingdienst.voetbal_vereniging.controller.InjuryController;
 import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
 import nl.belastingdienst.voetbal_vereniging.dto.InjuryDto;
+import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
+import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.repository.InjuryRepository;
+import nl.belastingdienst.voetbal_vereniging.repository.PlayerDataRepository;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +28,12 @@ public class PlayerService {
 
     private InjuryRepository injuryRepository;
 
+    private PlayerDataRepository playerDataRepository;
+
 
     @Autowired
-    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository) {
+    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository) {
+        this.playerDataRepository = playerDataRepository;
         this.repository = repository;
         this.injuryRepository = injuryRepository;
     }
@@ -52,29 +58,19 @@ public class PlayerService {
         return newSpeler;
     }
 
-
-
     public Player addNewSpeler(PlayerDto playerDto) {
-
         Player player = repository.save(convertDtoToPlayer(playerDto));
-        Long newPlayerId = player.getPlayerId();
-
-        if (playerDto.getInjury() != null) {
-            System.out.println("player has injuries to save in DB");
-            for (InjuryDto injuryDto : playerDto.getInjury()) {
-                Injury injury = InjuryService.convertDtoToInjury(injuryDto);
-                injury.setPlayer(player);
-                injuryRepository.save(injury);
-            }
-        }
-
+        // hoe kan ik de duplicate entree in de database voorkomen?
+        checkIfPlayerDtoHasInjury(playerDto, player);
+        checkIfPlayerDtoHasPlayerData(playerDto, player);
         return player;
     }
 
     public boolean updatePlayerById(PlayerDto playerDto, int id) {
         if (checkIfIdExists(id)) {
-            Player updatedPlayer = convertDtoToExistingPlayer(playerDto, repository.findById(id).get());
-            repository.save(updatedPlayer);
+            Player updatedPlayer = repository.save(convertDtoToExistingPlayer(playerDto, repository.findById(id).get()));
+            checkIfPlayerDtoHasInjury(playerDto, updatedPlayer);
+            checkIfPlayerDtoHasPlayerData(playerDto, updatedPlayer);
             return true;
         }
         return false;
@@ -86,6 +82,24 @@ public class PlayerService {
             return true;
         }
         return false;
+    }
+
+    public void checkIfPlayerDtoHasPlayerData(PlayerDto playerDto, Player player) {
+        if (playerDto.getPlayerData() != null) {
+            PlayerData playerData = PlayerDataService.convertDtoToPlayerData(playerDto.getPlayerData());
+            playerData.setPlayer(player);
+            playerDataRepository.save(playerData);
+        }
+    }
+
+    public void checkIfPlayerDtoHasInjury(PlayerDto playerDto, Player player) {
+        if (playerDto.getInjury() != null) {
+            for (InjuryDto injuryDto : playerDto.getInjury()) {
+                Injury injury = InjuryService.convertDtoToInjury(injuryDto);
+                injury.setPlayer(player);
+                injuryRepository.save(injury);
+            }
+        }
     }
 
     /*

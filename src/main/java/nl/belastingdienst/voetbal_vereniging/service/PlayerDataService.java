@@ -90,7 +90,7 @@ public class PlayerDataService {
         return Optional.of(playerDataDto);
     }
 
-    private PlayerData convertDtoToPlayerData(PlayerDataDto playerDataDto){
+    public static PlayerData convertDtoToPlayerData(PlayerDataDto playerDataDto){
         return (PlayerData) new DtoUtils().convertToEntity(new PlayerData(), playerDataDto);
     }
 
