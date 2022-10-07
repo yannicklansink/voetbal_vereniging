@@ -15,8 +15,11 @@ import javax.persistence.*;
 public class PlayerData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_playerdata")
+    @SequenceGenerator(
+            name = "seq_playerdata",
+            initialValue = 50
+    )    private int id;
 
     @OneToOne
     @JoinColumn(name = "player_id")

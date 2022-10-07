@@ -15,8 +15,12 @@ import java.util.Date;
 public class Injury {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_injury")
+    @SequenceGenerator(
+            name = "seq_injury",
+            initialValue = 30
+    )
+    private int id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
@@ -26,7 +30,7 @@ public class Injury {
 
     private String explanation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "player_id")
 //    @JsonBackReference
     private Player player;

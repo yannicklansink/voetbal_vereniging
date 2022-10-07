@@ -30,9 +30,11 @@ public class PlayerService {
 
     private PlayerDataRepository playerDataRepository;
 
+    private InjuryService injuryService;
 
     @Autowired
-    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository) {
+    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService) {
+        this.injuryService = injuryService;
         this.playerDataRepository = playerDataRepository;
         this.repository = repository;
         this.injuryRepository = injuryRepository;
@@ -61,8 +63,12 @@ public class PlayerService {
     public Player addNewSpeler(PlayerDto playerDto) {
         Player player = repository.save(convertDtoToPlayer(playerDto));
         // hoe kan ik de duplicate entree in de database voorkomen?
-        checkIfPlayerDtoHasInjury(playerDto, player);
-        checkIfPlayerDtoHasPlayerData(playerDto, player);
+        // oplossing gevonden?
+        Injury injury = player.getInjury().get(0);
+        injury.setPlayer(player);
+        injuryService.updateInjury(injury);
+//        checkIfPlayerDtoHasInjury(playerDto, player);
+//        checkIfPlayerDtoHasPlayerData(playerDto, player);
         return player;
     }
 

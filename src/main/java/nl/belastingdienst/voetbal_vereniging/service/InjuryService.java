@@ -58,6 +58,12 @@ public class InjuryService {
         return false;
     }
 
+    // used in playerService
+    public void updateInjury(Injury injury) {
+
+        repository.save(injury);
+    }
+
     public boolean deleteInjuryById(int id) {
         if (checkIfIdExists(id)) {
             repository.deleteById(id);
