@@ -72,10 +72,13 @@ public class Player {
         this.team = team;
     }
 
-
     public Player(String playerName, Gender gender, Team team) {
         this.playerName = playerName;
         this.gender = gender;
         this.team = team;
+    }
+
+    public void addInjury(Injury injury) {
+        this.injury.add(injury);
     }
 }
