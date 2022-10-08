@@ -32,8 +32,11 @@ public class PlayerService {
 
     private InjuryService injuryService;
 
+    private PlayerDataService playerDataService;
+
     @Autowired
-    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService) {
+    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService, PlayerDataService playerDataService) {
+        this.playerDataService = playerDataService;
         this.injuryService = injuryService;
         this.playerDataRepository = playerDataRepository;
         this.repository = repository;
@@ -62,21 +65,28 @@ public class PlayerService {
 
     public Player addNewSpeler(PlayerDto playerDto) {
         Player player = repository.save(convertDtoToPlayer(playerDto));
-        // hoe kan ik de duplicate entree in de database voorkomen?
-        // oplossing gevonden?
-        Injury injury = player.getInjury().get(0);
-        injury.setPlayer(player);
-        injuryService.updateInjury(injury);
-//        checkIfPlayerDtoHasInjury(playerDto, player);
-//        checkIfPlayerDtoHasPlayerData(playerDto, player);
+//        for (Injury injury : player.getInjury()) {
+//            injury.setPlayer(player);
+//            injuryService.updateInjury(injury);
+//        }
+        checkIfPlayerDtoHasInjury(playerDto, player);
+        checkIfPlayerDtoHasPlayerData(playerDto, player);
         return player;
     }
 
     public boolean updatePlayerById(PlayerDto playerDto, int id) {
         if (checkIfIdExists(id)) {
             Player updatedPlayer = repository.save(convertDtoToExistingPlayer(playerDto, repository.findById(id).get()));
-            checkIfPlayerDtoHasInjury(playerDto, updatedPlayer);
-            checkIfPlayerDtoHasPlayerData(playerDto, updatedPlayer);
+            // updatedPlayer has no injuries
+
+            for (InjuryDto injuryDto : playerDto.getInjury()) {
+                Injury newInjury = InjuryService.convertDtoToInjury(injuryDto);
+                injuryRepository.delete(newInjury.getId());
+                updatedPlayer.addInjury(newInjury);
+                checkIfPlayerDtoHasInjury(playerDto, updatedPlayer);
+            }
+
+//            checkIfPlayerDtoHasPlayerData(playerDto, updatedPlayer);
             return true;
         }
         return false;
@@ -92,6 +102,8 @@ public class PlayerService {
 
     public void checkIfPlayerDtoHasPlayerData(PlayerDto playerDto, Player player) {
         if (playerDto.getPlayerData() != null) {
+            playerDataRepository.delete(player.getPlayerData().getId()); // delete old playerdata
+
             PlayerData playerData = PlayerDataService.convertDtoToPlayerData(playerDto.getPlayerData());
             playerData.setPlayer(player);
             playerDataRepository.save(playerData);
@@ -99,11 +111,25 @@ public class PlayerService {
     }
 
     public void checkIfPlayerDtoHasInjury(PlayerDto playerDto, Player player) {
+        System.out.println("before if statement");
         if (playerDto.getInjury() != null) {
-            for (InjuryDto injuryDto : playerDto.getInjury()) {
-                Injury injury = InjuryService.convertDtoToInjury(injuryDto);
+            System.out.println("after if statement");
+//            for (InjuryDto injuryDto : playerDto.getInjury()) {
+//                Injury injury = InjuryService.convertDtoToInjury(injuryDto);
+//                injury.setPlayer(player);
+//                injuryRepository.save(injury);
+//
+//                injury.setPlayer(player);
+//                injuryService.updateInjury(injury);
+//            }
+            if (player.getInjury() == null) {
+                System.out.println("Player injury is null :/");
+            }
+            for (Injury injury : player.getInjury()) {
+                System.out.println("updating injury for player: ");
+                System.out.println("player id: " + player.getPlayerId());
                 injury.setPlayer(player);
-                injuryRepository.save(injury);
+                injuryService.updateInjury(injury);
             }
         }
     }

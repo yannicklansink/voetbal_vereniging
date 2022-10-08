@@ -58,9 +58,7 @@ public class InjuryService {
         return false;
     }
 
-    // used in playerService
     public void updateInjury(Injury injury) {
-
         repository.save(injury);
     }
 

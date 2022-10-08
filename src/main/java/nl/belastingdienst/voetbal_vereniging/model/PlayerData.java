@@ -19,7 +19,8 @@ public class PlayerData {
     @SequenceGenerator(
             name = "seq_playerdata",
             initialValue = 50
-    )    private int id;
+    )
+    private int id;
 
     @OneToOne
     @JoinColumn(name = "player_id")
