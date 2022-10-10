@@ -81,4 +81,10 @@ public class Player {
     public void addInjury(Injury injury) {
         this.injury.add(injury);
     }
+
+    public void emptyInjuries() {
+        if (injury != null) {
+            injury.clear();
+        }
+    }
 }

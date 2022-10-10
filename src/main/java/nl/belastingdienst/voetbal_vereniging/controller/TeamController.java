@@ -1,9 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
 import nl.belastingdienst.voetbal_vereniging.model.Team;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.service.TeamService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,7 @@ public class TeamController {
 
     @GetMapping(value = "/team/{id}")
     public ResponseEntity<TeamDto> getTeamById(@PathVariable int id) {
-        Optional<TeamDto> teamDto = service.getTeamById(id);
+        Optional<TeamDto> teamDto = service.getTeamDtoById(id);
         if (teamDto.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
