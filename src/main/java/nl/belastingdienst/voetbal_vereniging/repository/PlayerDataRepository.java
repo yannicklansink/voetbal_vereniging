@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface PlayerDataRepository extends JpaRepository<PlayerData, Integer> {
 
-    @Transactional
+//    @Transactional
     @Modifying
     @Query("delete from PlayerData t where t.id = ?1")
     void delete(int entityId);
@@ -19,5 +19,5 @@ public interface PlayerDataRepository extends JpaRepository<PlayerData, Integer>
     @Transactional
     @Modifying
     @Query("delete from PlayerData t where t.player = ?1")
-    void deleteByPlayerId(Player player);
+    void deleteByPlayer(Player player);
 }

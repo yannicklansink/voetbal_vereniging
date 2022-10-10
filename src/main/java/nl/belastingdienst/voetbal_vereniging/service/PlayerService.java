@@ -31,14 +31,11 @@ public class PlayerService {
 
     private InjuryService injuryService;
 
-    private PlayerDataService playerDataService;
-
     private TeamService teamService;
 
     @Autowired
-    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService, PlayerDataService playerDataService, TeamService teamService) {
+    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService, TeamService teamService) {
         this.teamService = teamService;
-        this.playerDataService = playerDataService;
         this.injuryService = injuryService;
         this.playerDataRepository = playerDataRepository;
         this.repository = repository;
@@ -56,13 +53,23 @@ public class PlayerService {
         }
     }
 
-    public Optional<PlayerDto> getSpelerById(int id) {
+    public Optional<PlayerDto> getPlayerDtoById(int id) {
         Optional<PlayerDto> newSpeler = Optional.empty();
         if (checkIfIdExists(id)) {
             Optional<Player> speler = repository.findById(id);
             newSpeler = convertSpelerToDto(speler);
         }
         return newSpeler;
+    }
+
+    public Optional<Player> getPlayerById(int id) {
+        Optional<Player> newPlayer = Optional.empty();
+
+        if (checkIfIdExists(id)) {
+            newPlayer = repository.findById(id);
+
+        }
+        return newPlayer;
     }
 
     public Player addNewSpeler(PlayerDto playerDto) {
@@ -107,7 +114,7 @@ public class PlayerService {
     public void checkIfPlayerDtoHasPlayerData(PlayerDto playerDto, Player player) {
         if (playerDto.getPlayerData() != null) {
             playerDataRepository.delete(player.getPlayerData().getId()); // delete the double inserted playerdata
-            playerDataRepository.deleteByPlayerId(player); // delete old playerdata
+            playerDataRepository.deleteByPlayer(player); // delete old playerdata
 
 
             PlayerData playerData = PlayerDataService.convertDtoToPlayerData(playerDto.getPlayerData());

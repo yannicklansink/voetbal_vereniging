@@ -2,12 +2,10 @@ package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
+import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
-import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerDataRepository;
-import nl.belastingdienst.voetbal_vereniging.repository.TeamRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +19,11 @@ public class PlayerDataService {
 
     private PlayerDataRepository repository;
 
+    private PlayerService playerService;
+
     @Autowired
-    public PlayerDataService(PlayerDataRepository repository) {
+    public PlayerDataService(PlayerDataRepository repository, PlayerService playerService) {
+        this.playerService = playerService;
         this.repository = repository;
     }
 
@@ -54,6 +55,10 @@ public class PlayerDataService {
     public boolean updatePlayerDataById(PlayerDataDto playerDataDto, int id) {
         if (checkIfIdExists(id)) {
             PlayerData updatedPlayerData = convertDtoToExistingPlayerData(playerDataDto, repository.findById(id).get());
+            Optional<Player> player = playerService.getPlayerById(id);
+            if (player.isPresent()) {
+                updatedPlayerData.setPlayer(player.get());
+            }
             repository.save(updatedPlayerData);
             return true;
         }
@@ -62,7 +67,17 @@ public class PlayerDataService {
 
     public boolean deletePlayerDataById(int id) {
         if (checkIfIdExists(id)) {
-            repository.deleteById(id);
+            System.out.println("deleting playerdata by id: " + id);
+
+//            Optional<PlayerData> playerData = repository.findById(id);
+//            if (playerData.isPresent()) {
+//                Player player = playerData.get().getPlayer();
+//                player.setPlayerData(null);
+//            }
+
+
+//            repository.deleteById(id); // delete werkt niet.
+            repository.delete(id);
             return true;
         }
         return false;
