@@ -1,14 +1,14 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
-import nl.belastingdienst.voetbal_vereniging.controller.InjuryController;
 import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
 import nl.belastingdienst.voetbal_vereniging.dto.InjuryDto;
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
+import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
+import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.repository.InjuryRepository;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerDataRepository;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerRepository;
@@ -16,7 +16,6 @@ import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,8 +33,11 @@ public class PlayerService {
 
     private PlayerDataService playerDataService;
 
+    private TeamService teamService;
+
     @Autowired
-    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService, PlayerDataService playerDataService) {
+    public PlayerService(PlayerRepository repository, InjuryRepository injuryRepository, PlayerDataRepository playerDataRepository, InjuryService injuryService, PlayerDataService playerDataService, TeamService teamService) {
+        this.teamService = teamService;
         this.playerDataService = playerDataService;
         this.injuryService = injuryService;
         this.playerDataRepository = playerDataRepository;
@@ -64,29 +66,31 @@ public class PlayerService {
     }
 
     public Player addNewSpeler(PlayerDto playerDto) {
+        String teamName = playerDto.getTeamName();
+        playerDto.setTeamName(null);
         Player player = repository.save(convertDtoToPlayer(playerDto));
-//        for (Injury injury : player.getInjury()) {
-//            injury.setPlayer(player);
-//            injuryService.updateInjury(injury);
-//        }
-        checkIfPlayerDtoHasInjury(playerDto, player);
+        checkIfPlayerDtoHasInjury(player);
         checkIfPlayerDtoHasPlayerData(playerDto, player);
+        checkIfPlayerDtoHasTeam(player, teamName);
         return player;
     }
 
     public boolean updatePlayerById(PlayerDto playerDto, int id) {
         if (checkIfIdExists(id)) {
+            String teamName = playerDto.getTeamName();
+            playerDto.setTeamName(null);
             Player updatedPlayer = repository.save(convertDtoToExistingPlayer(playerDto, repository.findById(id).get()));
-            // updatedPlayer has no injuries
 
-            for (InjuryDto injuryDto : playerDto.getInjury()) {
-                Injury newInjury = InjuryService.convertDtoToInjury(injuryDto);
-                injuryRepository.delete(newInjury.getId());
-                updatedPlayer.addInjury(newInjury);
-                checkIfPlayerDtoHasInjury(playerDto, updatedPlayer);
+            if (playerDto.getInjury() != null) {
+                for (InjuryDto injuryDto : playerDto.getInjury()) {
+                    Injury newInjury = InjuryService.convertDtoToInjury(injuryDto);
+//                injuryRepository.delete(newInjury.getId()); // heeft nog geen id
+                    updatedPlayer.addInjury(newInjury);
+                    checkIfPlayerDtoHasInjury(updatedPlayer);
+                }
             }
-
-//            checkIfPlayerDtoHasPlayerData(playerDto, updatedPlayer);
+            checkIfPlayerDtoHasPlayerData(playerDto, updatedPlayer);
+            checkIfPlayerDtoHasTeam(updatedPlayer, teamName);
             return true;
         }
         return false;
@@ -102,7 +106,9 @@ public class PlayerService {
 
     public void checkIfPlayerDtoHasPlayerData(PlayerDto playerDto, Player player) {
         if (playerDto.getPlayerData() != null) {
-            playerDataRepository.delete(player.getPlayerData().getId()); // delete old playerdata
+            playerDataRepository.delete(player.getPlayerData().getId()); // delete the double inserted playerdata
+            playerDataRepository.deleteByPlayerId(player); // delete old playerdata
+
 
             PlayerData playerData = PlayerDataService.convertDtoToPlayerData(playerDto.getPlayerData());
             playerData.setPlayer(player);
@@ -110,27 +116,25 @@ public class PlayerService {
         }
     }
 
-    public void checkIfPlayerDtoHasInjury(PlayerDto playerDto, Player player) {
-        System.out.println("before if statement");
-        if (playerDto.getInjury() != null) {
-            System.out.println("after if statement");
-//            for (InjuryDto injuryDto : playerDto.getInjury()) {
-//                Injury injury = InjuryService.convertDtoToInjury(injuryDto);
-//                injury.setPlayer(player);
-//                injuryRepository.save(injury);
-//
-//                injury.setPlayer(player);
-//                injuryService.updateInjury(injury);
-//            }
-            if (player.getInjury() == null) {
-                System.out.println("Player injury is null :/");
-            }
+    public void checkIfPlayerDtoHasInjury(Player player) {
+
+        if (player.getInjury() != null) {
             for (Injury injury : player.getInjury()) {
                 System.out.println("updating injury for player: ");
                 System.out.println("player id: " + player.getPlayerId());
                 injury.setPlayer(player);
                 injuryService.updateInjury(injury);
             }
+        }
+    }
+
+    private void checkIfPlayerDtoHasTeam(Player player, String teamName) {
+        List<Team> teamList = teamService.doesTeamNameExists(teamName);
+        if (teamList.size() > 0) {
+            player.setTeam(teamList.get(0));
+            repository.save(player);
+        } else {
+            throw new BadTeamNameException("Team name does not exists");
         }
     }
 
@@ -155,13 +159,14 @@ public class PlayerService {
         return Optional.of(playerDto);
     }
 
-    // Is dit wel mogelijk? Want er zou informatie kunnen ontbreken in een DTO
-    private Player convertDtoToPlayer(PlayerDto playerDto){
+    private Player convertDtoToPlayer(PlayerDto playerDto) {
         return (Player) new DtoUtils().convertToEntity(new Player(), playerDto);
     }
 
     private Player convertDtoToExistingPlayer(PlayerDto playerDto, Player player) {
         Player newPlayer = convertDtoToPlayer(playerDto);
+        newPlayer.emptyInjuries();
+//        newPlayer.setPlayerData(null);
         newPlayer.setPlayerId(player.getPlayerId());
         return newPlayer;
     }

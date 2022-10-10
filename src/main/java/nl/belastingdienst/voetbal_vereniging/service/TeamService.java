@@ -1,10 +1,8 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Team;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.repository.TeamRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +34,18 @@ public class TeamService {
         }
     }
 
-    public Optional<TeamDto> getTeamById(int id) {
+    public Optional<TeamDto> getTeamDtoById(int id) {
         Optional<TeamDto> newTeam = Optional.empty();
         if (checkIfIdExists(id)) {
             Optional<Team> team = repository.findById(id);
             newTeam = convertTeamToDto(team);
         }
         return newTeam;
+    }
+
+    public Optional<Team> getTeamById(int id) {
+        Optional<Team> team = repository.findById(id);
+        return team;
     }
 
     public Team addNewTeam(TeamDto teamDto) {
@@ -98,4 +101,12 @@ public class TeamService {
         return newTeam;
     }
 
+    /*
+        Returns true when team name is in database
+     */
+    public List<Team> doesTeamNameExists(String teamName) {
+        System.out.println("does team name exists");
+        List<Team> teamList = repository.findTeamByTeamName(teamName);
+        return teamList;
+    }
 }

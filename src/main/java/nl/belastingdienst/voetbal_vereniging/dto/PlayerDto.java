@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
+import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 
 import java.time.LocalDate;
@@ -33,6 +34,9 @@ public class PlayerDto implements DtoEntity {
 
     @JsonIgnoreProperties(value = "player")
     private PlayerDataDto playerData;
+
+//    @JsonIgnoreProperties(value = {"players", "trainers", "games", "trainings" })
+    private String teamName;
 
     public PlayerDto(String playerName, String street, int houseNumber, String postalCode, int age, LocalDate birthDate, Gender gender) {
         this.playerName = playerName;
