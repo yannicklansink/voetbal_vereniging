@@ -1,11 +1,8 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
-import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.service.PlayerDataService;
-import nl.belastingdienst.voetbal_vereniging.service.TeamService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,10 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
+import nl.belastingdienst.voetbal_vereniging.dto.TeamPlayersDto;
+import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
+import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
+import nl.belastingdienst.voetbal_vereniging.exception.ForeignKeyFoundException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.repository.TeamRepository;
@@ -22,7 +26,7 @@ public class TeamService {
         this.repository = repository;
     }
 
-    public List<TeamDto> getAllTeams() {
+    public List<TeamPlayersDto> getAllTeams() {
         if (repository.count() != 0) {
             return repository.findAll()
                     .stream()
@@ -34,13 +38,13 @@ public class TeamService {
         }
     }
 
-    public Optional<TeamDto> getTeamDtoById(int id) {
-        Optional<TeamDto> newTeam = Optional.empty();
+    public Optional<TeamPlayersDto> getTeamDtoById(int id) {
+        Optional<TeamPlayersDto> newTeamPlayersDto = Optional.empty();
         if (checkIfIdExists(id)) {
             Optional<Team> team = repository.findById(id);
-            newTeam = convertTeamToDto(team);
+            newTeamPlayersDto = convertTeamToDto(team);
         }
-        return newTeam;
+        return newTeamPlayersDto;
     }
 
     public Optional<Team> getTeamById(int id) {
@@ -48,13 +52,13 @@ public class TeamService {
         return team;
     }
 
-    public Team addNewTeam(TeamDto teamDto) {
-        return repository.save(convertDtoToTeam(teamDto));
+    public Team addNewTeam(TeamPlayersDto teamPlayersDto) {
+        return repository.save(convertDtoToTeam(teamPlayersDto));
     }
 
-    public boolean updateTeamById(TeamDto teamDto, int id) {
+    public boolean updateTeamById(TeamPlayersDto teamPlayersDto, int id) {
         if (checkIfIdExists(id)) {
-            Team updatedTeam = convertDtoToExistingTeam(teamDto, repository.findById(id).get());
+            Team updatedTeam = convertDtoToExistingTeam(teamPlayersDto, repository.findById(id).get());
             repository.save(updatedTeam);
             return true;
         }
@@ -63,7 +67,12 @@ public class TeamService {
 
     public boolean deleteTeamById(int id) {
         if (checkIfIdExists(id)) {
-            repository.deleteById(id);
+            try {
+                repository.deleteById(id);
+            } catch (Exception e) {
+                throw new ForeignKeyFoundException("You can not delete a team when it has foreign key(s) attached");
+            }
+
             return true;
         }
         return false;
@@ -82,21 +91,23 @@ public class TeamService {
     }
 
     // Convert DTOs and Entities methodes
-    private TeamDto convertTeamToDto(Team team) {
-        return (TeamDto) new DtoUtils().convertToDto(team, new TeamDto());
+    private TeamPlayersDto convertTeamToDto(Team team) {
+        TeamPlayersDto returnTeamDto = (TeamPlayersDto) new DtoUtils().convertToDto(team, new TeamPlayersDto());
+        return returnTeamDto;
+//        return (TeamDto) new DtoUtils().convertToDto(team, new TeamDto());
     }
 
-    private Optional<TeamDto> convertTeamToDto(Optional<Team> team) {
-        TeamDto teamDto = (TeamDto) new DtoUtils().convertToDto(team.get(), new TeamDto());
-        return Optional.of(teamDto);
+    private Optional<TeamPlayersDto> convertTeamToDto(Optional<Team> team) {
+        TeamPlayersDto teamPlayersDto = (TeamPlayersDto) new DtoUtils().convertToDto(team.get(), new TeamPlayersDto());
+        return Optional.of(teamPlayersDto);
     }
 
-    private Team convertDtoToTeam(TeamDto teamDto){
-        return (Team) new DtoUtils().convertToEntity(new Team(), teamDto);
+    private Team convertDtoToTeam(TeamPlayersDto teamPlayersDto){
+        return (Team) new DtoUtils().convertToEntity(new Team(), teamPlayersDto);
     }
 
-    private Team convertDtoToExistingTeam(TeamDto teamDto, Team team) {
-        Team newTeam = convertDtoToTeam(teamDto);
+    private Team convertDtoToExistingTeam(TeamPlayersDto teamPlayersDto, Team team) {
+        Team newTeam = convertDtoToTeam(teamPlayersDto);
         newTeam.setId(team.getId());
         return newTeam;
     }
@@ -105,8 +116,17 @@ public class TeamService {
         Returns true when team name is in database
      */
     public List<Team> doesTeamNameExists(String teamName) {
-        System.out.println("does team name exists");
         List<Team> teamList = repository.findTeamByTeamName(teamName);
         return teamList;
+    }
+
+    public int getTeamIdFromName(String teamName) {
+        String uppercaseRefereeName = teamName.substring(0, 1).toUpperCase() + teamName.substring(1);
+        List<Integer> validName = repository.findTeamIdByTeamName(uppercaseRefereeName);
+        if (validName.size() > 0 ) {
+            return validName.get(0);
+        } else {
+            throw new BadRequestException("Your request for team name is not valid");
+        }
     }
 }

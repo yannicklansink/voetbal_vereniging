@@ -25,11 +25,12 @@ public class GameDto implements  DtoEntity {
 
     private String opponent;
 
-    @JsonIgnoreProperties(value = "games")
+    // only refereeName
+    @JsonIgnoreProperties(value = {"games", "street", "houseNumber", "postalCode"})
     private RefereeDto referee;
 
-//    @JsonIncludeProperties(value = "teamName")
-//    @JsonIgnoreProperties(value = {"games", "players"})
-    private TeamDto team;
+    // only teamName
+    @JsonIgnoreProperties(value = "players")
+    private TeamPlayersDto team;
 
 }

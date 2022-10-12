@@ -16,7 +16,7 @@ public class Trainer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_trainer")
     @SequenceGenerator(
             name = "seq_trainer",
-            initialValue = 1
+            initialValue = 10
     )
     private int id;
 
@@ -31,15 +31,9 @@ public class Trainer {
 
     private String postalCode;
 
-//    @OneToMany(mappedBy = "trainer")
-//    private List<Training> trainings;
-
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
-
-//    @OneToMany(mappedBy = "trainer")
-//    private List<Game> games;
 
     public Trainer(String trainerName, String street, int houseNumber, String postalCode) {
         this.trainerName = trainerName;

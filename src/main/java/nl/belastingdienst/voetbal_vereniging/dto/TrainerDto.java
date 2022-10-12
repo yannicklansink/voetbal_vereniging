@@ -20,8 +20,7 @@ public class TrainerDto implements DtoEntity {
 
     private String postalCode;
 
-    private Team team;
+    private TeamDto team;
 
-    private List<Game> games;
 
 }
