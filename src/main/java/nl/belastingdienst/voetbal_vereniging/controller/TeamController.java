@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
+import nl.belastingdienst.voetbal_vereniging.dto.TeamPlayersDto;
 import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.service.TeamService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
@@ -28,46 +29,46 @@ public class TeamController {
     }
 
     @GetMapping(value = "/teams")
-    public ResponseEntity<List<TeamDto>> getAllTeams() {
-        List<TeamDto> teamDtos = service.getAllTeams();
-        if(teamDtos.isEmpty()){
+    public ResponseEntity<List<TeamPlayersDto>> getAllTeams() {
+        List<TeamPlayersDto> teamPlayersDto = service.getAllTeams();
+        if(teamPlayersDto.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(teamDtos, HttpStatus.OK);
+        return new ResponseEntity<>(teamPlayersDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/team/{id}")
-    public ResponseEntity<TeamDto> getTeamById(@PathVariable int id) {
-        Optional<TeamDto> teamDto = service.getTeamDtoById(id);
-        if (teamDto.isEmpty()) {
+    public ResponseEntity<TeamPlayersDto> getTeamById(@PathVariable int id) {
+        Optional<TeamPlayersDto> teamPlayersDto = service.getTeamDtoById(id);
+        if (teamPlayersDto.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(teamDto.get(), HttpStatus.OK);
+        return new ResponseEntity<>(teamPlayersDto.get(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/team")
-    public ResponseEntity<String> postTeam(@Valid @RequestBody TeamDto teamDto, BindingResult br) {
+    public ResponseEntity<String> postTeam(@Valid @RequestBody TeamPlayersDto teamPlayersDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
         }
-        Team team = service.addNewTeam(teamDto);
+        Team team = service.addNewTeam(teamPlayersDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(team.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
     @PutMapping(value = "/team/{id}")
-    public ResponseEntity<String> putTeamById(@Valid @RequestBody TeamDto teamDto, @PathVariable int id, BindingResult br) {
+    public ResponseEntity<String> putTeamById(@Valid @RequestBody TeamPlayersDto teamPlayersDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
         }
-        service.updateTeamById(teamDto, id);
+        service.updateTeamById(teamPlayersDto, id);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
     @DeleteMapping(value = "/team/{id}")
-    public ResponseEntity<TeamDto> deleteTeam(@PathVariable int id) {
+    public ResponseEntity<TeamPlayersDto> deleteTeam(@PathVariable int id) {
         if (service.deleteTeamById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

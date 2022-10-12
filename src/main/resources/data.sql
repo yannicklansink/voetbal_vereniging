@@ -16,7 +16,8 @@ INSERT INTO team (id, team_name) VALUES
                                      (2, 'FC Twente'),
                                      (3, 'FC Barcelona'),
                                      (4, 'Juventus'),
-                                     (5, 'Bayern Munchen');
+                                     (5, 'Bayern Munchen'),
+                                     (6, 'Dortmund');
 
 INSERT INTO player (player_id, player_name, gender, team_id) VALUES
                                                        (1, 'Yannick', 'MALE', 1),
@@ -64,15 +65,15 @@ INSERT INTO player (player_id, player_name, gender, team_id) VALUES
                                                        (43, 'Ties', 'MALE', 3),
                                                        (44, 'Joep', 'MALE', 4);
 
-INSERT INTO trainer (id, trainer_name, house_number) VALUES
-                           (1, 'Jorgen', 55),
-                           (2, 'Michael', 102),
-                           (3, 'Rutger', 2),
-                           (4, 'Wouter', 1005),
-                           (5, 'Rene', 38),
-                           (6, 'Harry', 29),
-                           (7, 'Peter', 47),
-                           (8, 'Vincent', 98);
+INSERT INTO trainer (id, trainer_name, house_number, team_id) VALUES
+                           (1, 'Jorgen', 55, 1),
+                           (2, 'Michael', 102, 2),
+                           (3, 'Rutger', 2, 3),
+                           (4, 'Wouter', 1005, 4),
+                           (5, 'Rene', 38, 5),
+                           (6, 'Harry', 29, null),
+                           (7, 'Peter', 47, null),
+                           (8, 'Vincent', 98, null);
 
 INSERT INTO training (id, date, team_id) VALUES
                             (1, '2022-10-10', 1),

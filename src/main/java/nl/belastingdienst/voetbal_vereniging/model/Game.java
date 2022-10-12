@@ -19,7 +19,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_game")
     @SequenceGenerator(
             name = "seq_game",
-            initialValue = 1
+            initialValue = 13
     )
     private int id;
 

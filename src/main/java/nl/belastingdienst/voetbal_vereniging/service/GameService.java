@@ -1,15 +1,19 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.GameDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
+import nl.belastingdienst.voetbal_vereniging.dto.RefereeDto;
+import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
+import nl.belastingdienst.voetbal_vereniging.dto.TeamPlayersDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Game;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
+import nl.belastingdienst.voetbal_vereniging.model.Referee;
+import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.repository.GameRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,8 +23,14 @@ public class GameService {
 
     private GameRepository repository;
 
+    private RefereeService refereeService;
+
+    private TeamService teamService;
+
     @Autowired
-    public GameService(GameRepository repository) {
+    public GameService(GameRepository repository, RefereeService refereeService, TeamService teamService) {
+        this.refereeService = refereeService;
+        this.teamService = teamService;
         this.repository = repository;
     }
 
@@ -46,7 +56,32 @@ public class GameService {
     }
 
     public Game addNewGame(GameDto gameDto) {
-        return repository.save(convertDtoToGame(gameDto));
+        // check name van referee
+        Optional<Referee> referee = Optional.empty();
+        if (gameDto.getReferee() != null) {
+            String refereeName = gameDto.getReferee().getRefereeName(); // this can be null
+            int refereeId = refereeService.getRefereeIdFromName(refereeName);
+            referee = refereeService.getRefereeDtoById(refereeId);
+        }
+
+        // check name van team
+        Optional<Team> team = Optional.empty();
+        if (gameDto.getTeam() != null) {
+            String teamName = gameDto.getTeam().getTeamName();
+            int teamNameId = teamService.getTeamIdFromName(teamName);
+            team = teamService.getTeamById(teamNameId);
+
+        }
+        Game game = convertDtoToGame(gameDto);
+        if (referee.isPresent() && team.isPresent()) {
+            game.setReferee(referee.get());
+            game.setTeam(team.get());
+        }
+
+
+        System.out.println(game.getTeam().getTeamName());
+        System.out.println(game.getReferee().getId());
+        return repository.save(game);
     }
 
     public boolean updateGameById(GameDto gameDto, int id) {

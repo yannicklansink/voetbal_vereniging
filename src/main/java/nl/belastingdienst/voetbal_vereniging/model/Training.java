@@ -17,7 +17,7 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_training")
     @SequenceGenerator(
             name = "seq_training",
-            initialValue = 1
+            initialValue = 10
     )
     private int id;
 

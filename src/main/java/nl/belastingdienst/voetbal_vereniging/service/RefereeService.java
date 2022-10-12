@@ -1,16 +1,14 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.RefereeDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
+import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.repository.RefereeRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Ref;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,6 +40,14 @@ public class RefereeService {
         if (checkIfIdExists(id)) {
             Optional<Referee> referee = repository.findById(id);
             newReferee = convertRefereeToDto(referee);
+        }
+        return newReferee;
+    }
+
+    public Optional<Referee> getRefereeDtoById(int refereeId) {
+        Optional<Referee> newReferee = Optional.empty();
+        if (checkIfIdExists(refereeId)) {
+            newReferee = repository.findById(refereeId);
         }
         return newReferee;
     }
@@ -84,19 +90,34 @@ public class RefereeService {
         return (RefereeDto) new DtoUtils().convertToDto(referee, new RefereeDto());
     }
 
-    private Optional<RefereeDto> convertRefereeToDto(Optional<Referee> referee) {
-        RefereeDto refereeDto = (RefereeDto) new DtoUtils().convertToDto(referee.get(), new RefereeDto());
-        return Optional.of(refereeDto);
+    public Optional<RefereeDto> convertRefereeToDto(Optional<Referee> referee) {
+        if (referee.isPresent()) {
+            RefereeDto refereeDto = (RefereeDto) new DtoUtils().convertToDto(referee.get(), new RefereeDto());
+            return Optional.of(refereeDto);
+        }
+        throw new RecordNotFoundException("Referee is not present");
     }
 
     private Referee convertDtoToReferee(RefereeDto refereeDto){
         return (Referee) new DtoUtils().convertToEntity(new Referee(), refereeDto);
     }
 
-    private Referee convertDtoToExistingReferee(RefereeDto refereeDto, Referee referee) {
+    public Referee convertDtoToExistingReferee(RefereeDto refereeDto, Referee referee) {
         Referee newReferee = convertDtoToReferee(refereeDto);
         newReferee.setId(referee.getId());
         return newReferee;
     }
+
+    public int getRefereeIdFromName(String refereeName) {
+        String uppercaseRefereeName = refereeName.substring(0, 1).toUpperCase() + refereeName.substring(1);
+        List<Integer> validName = repository.findRefereeByRefereeName(uppercaseRefereeName);
+        if (validName.size() > 0 ) {
+            return validName.get(0);
+        } else {
+            throw new BadRequestException("Your request for referee name is not valid");
+        }
+
+    }
+
 
 }

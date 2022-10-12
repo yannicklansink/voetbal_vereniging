@@ -17,8 +17,11 @@ public class TrainerService {
 
     private TrainerRepository repository;
 
+    private TeamService teamService;
+
     @Autowired
-    public TrainerService(TrainerRepository repository) {
+    public TrainerService(TrainerRepository repository, TeamService teamService) {
+        this.teamService = teamService;
         this.repository = repository;
     }
 
@@ -44,10 +47,26 @@ public class TrainerService {
     }
 
     public Trainer addNewTrainer(TrainerDto trainerDto) {
+        boolean checkIfIdOfTeamExists = false;
+        if (trainerDto.getTeam() != null) {
+            checkIfIdOfTeamExists = teamService.checkIfIdExists(trainerDto.getTeam().getId());
+        }
+
+        if (!checkIfIdOfTeamExists) {
+            throw new RecordNotFoundException("Team id is not used");
+        }
         return repository.save(convertDtoToTrainer(trainerDto));
     }
 
     public boolean updateTrainerById(TrainerDto trainerDto, int id) {
+        boolean checkIfIdOfTeamExists = false;
+        if (trainerDto.getTeam() != null) {
+            checkIfIdOfTeamExists = teamService.checkIfIdExists(trainerDto.getTeam().getId());
+        }
+
+        if (!checkIfIdOfTeamExists) {
+            throw new RecordNotFoundException("Team id is not used");
+        }
         if (checkIfIdExists(id)) {
             Trainer updateTrainer = convertDtoToExistingTrainer(trainerDto, repository.findById(id).get());
             repository.save(updateTrainer);

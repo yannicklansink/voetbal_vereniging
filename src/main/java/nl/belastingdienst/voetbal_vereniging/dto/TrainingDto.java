@@ -22,4 +22,6 @@ public class TrainingDto implements DtoEntity{
 //    @JsonIncludeProperties(value = "teamName")
     private TeamDto team;
 
+
+
 }

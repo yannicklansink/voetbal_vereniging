@@ -12,11 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class TeamDto implements DtoEntity{
 
-//    private String teamName;
     private int id;
-
-//    private List<PlayerDto> players;
-//
-//    private List<TrainerDto> trainers;
 
 }
