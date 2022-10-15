@@ -49,6 +49,8 @@ public class PlayerController {
         return new ResponseEntity<>(spelerDto.get(), HttpStatus.OK);
     }
 
+
+
     // @Valid: When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
     @PostMapping(value = "/player")
     public ResponseEntity<String> postPlayer(@Valid @RequestBody PlayerDto playerDto, BindingResult br) {

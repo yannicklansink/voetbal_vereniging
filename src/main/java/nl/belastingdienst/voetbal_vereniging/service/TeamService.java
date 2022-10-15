@@ -65,15 +65,17 @@ public class TeamService {
         return false;
     }
 
+    /*
+    Team will only be deleted if the foreign key is not used in another table
+     */
     public boolean deleteTeamById(int id) {
         if (checkIfIdExists(id)) {
             try {
                 repository.deleteById(id);
+                return true;
             } catch (Exception e) {
                 throw new ForeignKeyFoundException("You can not delete a team when it has foreign key(s) attached");
             }
-
-            return true;
         }
         return false;
     }

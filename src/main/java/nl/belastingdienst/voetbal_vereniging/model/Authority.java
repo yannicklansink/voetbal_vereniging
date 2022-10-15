@@ -18,7 +18,7 @@ public class Authority implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_authority")
     @SequenceGenerator(
             name = "seq_authority",
-            initialValue = 1
+            initialValue = 5
     )
     private Long id;
 

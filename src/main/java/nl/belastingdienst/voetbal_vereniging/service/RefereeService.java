@@ -2,6 +2,7 @@ package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.RefereeDto;
 import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
+import nl.belastingdienst.voetbal_vereniging.exception.ForeignKeyFoundException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
 import nl.belastingdienst.voetbal_vereniging.repository.RefereeRepository;
@@ -52,12 +53,18 @@ public class RefereeService {
         return newReferee;
     }
 
+    /*
+    Actor can't create games from posting a referee
+    returns a new Referee
+     */
     public Referee addNewReferee(RefereeDto refereeDto) {
+        refereeDto.setGames(null);
         return repository.save(convertDtoToReferee(refereeDto));
     }
 
     public boolean updateRefereeById(RefereeDto refereeDto, int id) {
         if (checkIfIdExists(id)) {
+            refereeDto.setGames(null);
             Referee updatedReferee = convertDtoToExistingReferee(refereeDto, repository.findById(id).get());
             repository.save(updatedReferee);
             return true;
@@ -65,10 +72,17 @@ public class RefereeService {
         return false;
     }
 
+    /*
+    Referee will only be deleted if the foreign key is not used in another table
+     */
     public boolean deleteRefereeById(int id) {
         if (checkIfIdExists(id)) {
-            repository.deleteById(id);
-            return true;
+            try {
+                repository.deleteById(id);
+                return true;
+            } catch (Exception e) {
+                throw new ForeignKeyFoundException("You can not delete a referee when it has foreign key(s) attached");
+            }
         }
         return false;
     }

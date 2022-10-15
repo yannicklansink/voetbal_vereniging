@@ -2,14 +2,17 @@ package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
+import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerDataRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
+import org.modelmapper.internal.asm.tree.TryCatchBlockNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,6 +51,37 @@ public class PlayerDataService {
         return newPlayerDataDto;
     }
 
+
+    /*
+    returns a list of players based on criteria matching with playerdatadto from the user
+     */
+    public List<PlayerDataDto> getPlayersScoutingList(PlayerDataDto playerDataDto) {
+        List<PlayerData> playersDataList = new ArrayList<>();
+        try {
+            playersDataList = repository.findPlayersScoutingList(playerDataDto.getPosition().toString());
+        } catch (Exception e ) {
+            throw new BadRequestException("You must specify the position of your player \n Valid positions are: \n  " +
+                    "    GK - Goal Keeper\n" +
+                    "    CB - Center Back\n" +
+                    "    LB -Left Back\n" +
+                    "    RB - Right Back\n" +
+                    "    DM - Defending Mid\n" +
+                    "    CM - Center Mid\n" +
+                    "    AM - Attack Mid\n" +
+                    "    LM - Left Mid\n" +
+                    "    RM - Right Mid\n" +
+                    "    CF - Center Forward\n" +
+                    "    S - Striker\n" +
+                    "    RW - Right Wing\n" +
+                    "    LW - Left wing");
+        }
+        List<PlayerDataDto> playersDataDtoList = new ArrayList<>();
+        for (PlayerData playerData : playersDataList) {
+            playersDataDtoList.add(convertPlayerDataToDto(playerData));
+        }
+        return playersDataDtoList;
+    }
+
     public PlayerData addNewPlayerData(PlayerDataDto playerDataDto) {
         return repository.save(convertDtoToPlayerData(playerDataDto));
     }
@@ -67,16 +101,6 @@ public class PlayerDataService {
 
     public boolean deletePlayerDataById(int id) {
         if (checkIfIdExists(id)) {
-            System.out.println("deleting playerdata by id: " + id);
-
-//            Optional<PlayerData> playerData = repository.findById(id);
-//            if (playerData.isPresent()) {
-//                Player player = playerData.get().getPlayer();
-//                player.setPlayerData(null);
-//            }
-
-
-//            repository.deleteById(id); // delete werkt niet.
             repository.delete(id);
             return true;
         }

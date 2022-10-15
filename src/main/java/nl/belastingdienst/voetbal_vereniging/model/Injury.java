@@ -18,7 +18,7 @@ public class Injury {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_injury")
     @SequenceGenerator(
             name = "seq_injury",
-            initialValue = 30
+            initialValue = 15
     )
     private int id;
 
@@ -32,7 +32,6 @@ public class Injury {
 
     @ManyToOne
     @JoinColumn(name = "player_id")
-//    @JsonBackReference
     private Player player;
 
     public Injury(LocalDate startDate, LocalDate endDate, String explanation, Player player) {

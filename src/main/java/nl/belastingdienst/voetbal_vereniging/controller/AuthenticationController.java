@@ -2,6 +2,7 @@ package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.AuthenticationRequest;
 import nl.belastingdienst.voetbal_vereniging.dto.AuthenticationResponse;
+import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.security.JwtUtil;
 import nl.belastingdienst.voetbal_vereniging.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class AuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (BadCredentialsException ex) {
-            throw new Exception("Incorrect username or password", ex);
+            throw new BadRequestException("Incorrect username or password");
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);

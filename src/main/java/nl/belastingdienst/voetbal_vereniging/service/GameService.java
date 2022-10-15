@@ -58,7 +58,7 @@ public class GameService {
     public Game addNewGame(GameDto gameDto) {
         // check name van referee
         Optional<Referee> referee = Optional.empty();
-        if (gameDto.getReferee() != null) {
+        if (gameDto.getReferee() != null && gameDto.getReferee().getRefereeName() != null) {
             String refereeName = gameDto.getReferee().getRefereeName(); // this can be null
             int refereeId = refereeService.getRefereeIdFromName(refereeName);
             referee = refereeService.getRefereeDtoById(refereeId);
@@ -66,7 +66,7 @@ public class GameService {
 
         // check name van team
         Optional<Team> team = Optional.empty();
-        if (gameDto.getTeam() != null) {
+        if (gameDto.getTeam() != null && gameDto.getTeam().getTeamName() != null) {
             String teamName = gameDto.getTeam().getTeamName();
             int teamNameId = teamService.getTeamIdFromName(teamName);
             team = teamService.getTeamById(teamNameId);
@@ -76,17 +76,41 @@ public class GameService {
         if (referee.isPresent() && team.isPresent()) {
             game.setReferee(referee.get());
             game.setTeam(team.get());
+        } else {
+            throw new RecordNotFoundException("You must specify the team name and the referee");
         }
-
-
-        System.out.println(game.getTeam().getTeamName());
-        System.out.println(game.getReferee().getId());
         return repository.save(game);
     }
 
     public boolean updateGameById(GameDto gameDto, int id) {
         if (checkIfIdExists(id)) {
+
+            // check name van referee
+            Optional<Referee> referee = Optional.empty();
+            if (gameDto.getReferee() != null && gameDto.getReferee().getRefereeName() != null) {
+                String refereeName = gameDto.getReferee().getRefereeName(); // this can be null
+                int refereeId = refereeService.getRefereeIdFromName(refereeName);
+                referee = refereeService.getRefereeDtoById(refereeId);
+            }
+
+            // check name van team
+            Optional<Team> team = Optional.empty();
+            if (gameDto.getTeam() != null && gameDto.getTeam().getTeamName() != null) {
+                String teamName = gameDto.getTeam().getTeamName();
+                int teamNameId = teamService.getTeamIdFromName(teamName);
+                team = teamService.getTeamById(teamNameId);
+
+            }
+//            Game game = convertDtoToGame(gameDto);
             Game updatedGame = convertDtoToExistingGame(gameDto, repository.findById(id).get());
+
+            if (referee.isPresent() && team.isPresent()) {
+                updatedGame.setReferee(referee.get());
+                updatedGame.setTeam(team.get());
+            } else {
+                throw new RecordNotFoundException("You must specify the team name and the referee");
+            }
+
             repository.save(updatedGame);
             return true;
         }

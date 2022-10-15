@@ -1,8 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
-import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
-import nl.belastingdienst.voetbal_vereniging.dto.InjuryDto;
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
+import nl.belastingdienst.voetbal_vereniging.dto.*;
 import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
@@ -16,6 +14,7 @@ import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,6 +70,7 @@ public class PlayerService {
         }
         return newPlayer;
     }
+
 
     public Player addNewSpeler(PlayerDto playerDto) {
         String teamName = playerDto.getTeamName();
@@ -177,9 +177,5 @@ public class PlayerService {
         newPlayer.setPlayerId(player.getPlayerId());
         return newPlayer;
     }
-
-
-
-
 
 }
