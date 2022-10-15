@@ -35,8 +35,8 @@ public class SecurityFilter {
 
     // Create and configure an instance of a Password encoder to encrypt the users passwords.
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(10);
+    public static PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 //
 //    @Bean
@@ -62,7 +62,7 @@ public class SecurityFilter {
                 .authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/authenticated").permitAll()
-//                .antMatchers("/users").permitAll()
+                .antMatchers("/users").permitAll()
 //                .antMatchers("/users/**").permitAll()
 //                .antMatchers("/books").hasRole("USER")
 //                .antMatchers("/**").denyAll()

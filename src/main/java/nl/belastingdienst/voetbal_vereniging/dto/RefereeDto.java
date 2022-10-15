@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.belastingdienst.voetbal_vereniging.model.Game;
@@ -20,5 +21,6 @@ public class RefereeDto implements DtoEntity {
 
     private String postalCode;
 
+    @JsonIgnoreProperties(value = "referee")
     private List<GameDto> games;
 }

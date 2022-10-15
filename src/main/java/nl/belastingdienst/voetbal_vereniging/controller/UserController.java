@@ -36,7 +36,6 @@ public class UserController {
 
         UserDto optionalUser = userService.getUser(username);
 
-
         return ResponseEntity.ok().body(optionalUser);
 
     }
@@ -45,13 +44,15 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto dto) {;
 
         String newUsername = userService.createUser(dto);
-        for (Authority authority : dto.authorities) {
-            userService.addAuthority(newUsername, authority.getAuthority());
-        }
-//        userService.addAuthority(newUsername, dto.authorities.stream(a -> );
+//        for (Authority authority : dto.authorities) {
+//            userService.addAuthority(newUsername, authority.getAuthority());
+//        }
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
-                .buildAndExpand(newUsername).toUri();
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{username}")
+                .buildAndExpand(newUsername)
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }

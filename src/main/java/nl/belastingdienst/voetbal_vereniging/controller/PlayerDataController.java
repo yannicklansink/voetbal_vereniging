@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
+import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.service.PlayerDataService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
@@ -43,6 +44,20 @@ public class PlayerDataController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(playerDataDto.get(), HttpStatus.OK);
+    }
+
+    /*
+    Get request to find a list of PlayerDataDtos that match a specific criteria from the @RequestBody
+     */
+    @GetMapping(value = "/trainer/players-scouting")
+    public ResponseEntity<List<PlayerDataDto>> getPlayersScouting(@RequestBody PlayerDataDto playerDataDto) {
+
+        List<PlayerDataDto> playerDtos = service.getPlayersScoutingList(playerDataDto);
+        if(playerDtos.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(playerDtos, HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/player-data")

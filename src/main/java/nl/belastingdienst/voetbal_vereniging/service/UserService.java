@@ -1,14 +1,18 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.UserDto;
+import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Authority;
 import nl.belastingdienst.voetbal_vereniging.model.User;
 import nl.belastingdienst.voetbal_vereniging.repository.UserRepository;
+import nl.belastingdienst.voetbal_vereniging.security.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +20,16 @@ import java.util.Set;
 
 @Service
 public class UserService {
-    @Autowired
+
     private UserRepository repository;
+
+//    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService( UserRepository userRepository) {
+        this.repository = userRepository;
+//        this.passwordEncoder = passwordEncoder;
+    }
 
 //    @Autowired
 //    private AuthorityRepository authorityRepository;
@@ -46,9 +58,33 @@ public class UserService {
         return repository.existsById(username);
     }
 
+//    public String createUser(UserDto userDto) {
+//        User newUser = repository.save(toUser(userDto));
+//        return newUser.getUsername();
+//    }
+
     public String createUser(UserDto userDto) {
-        User newUser = repository.save(toUser(userDto));
-        return newUser.getUsername();
+        try {
+            String encryptedPassword = SecurityFilter.passwordEncoder().encode(userDto.getPassword());
+
+            User user = new User();
+            user.setUsername(userDto.getUsername());
+            user.setPassword(encryptedPassword);
+            user.setEmail(userDto.getEmail());
+            user.setEnabled(true);
+            user.addAuthority(new Authority(userDto.getUsername(), "ROLE_USER"));
+            for (Authority s : userDto.getAuthorities()) {
+                if (!s.getAuthority().equals("ROLE_USER")) {
+                    user.addAuthority(s);
+                }
+            }
+
+            User newUser = repository.save(user);
+            return newUser.getUsername();
+        }
+        catch (Exception ex) {
+            throw new BadRequestException("Cannot create user.");
+        }
     }
 
     public void deleteUser(String username) {
@@ -70,7 +106,6 @@ public class UserService {
     }
 
     public void addAuthority(String username, String authority) {
-
         if (!repository.existsById(username)) throw new UsernameNotFoundException(username);
         User user = repository.findById(username).get();
         user.addAuthority(new Authority(username, authority));
@@ -103,7 +138,9 @@ public class UserService {
         var user = new User();
 
         user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(userDto.getPassword()); // moet de password niet worden encrypted?
+//        String password = SecurityFilter.passwordEncoder().encode(userDto.getPassword());
+//        user.setPassword(password);
         user.setEnabled(userDto.getEnabled());
         user.setEmail(userDto.getEmail());
 

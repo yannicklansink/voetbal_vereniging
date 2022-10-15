@@ -16,7 +16,7 @@ public class Referee {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_referee")
     @SequenceGenerator(
             name = "seq_referee",
-            initialValue = 1
+            initialValue = 10
     )
     private int id;
 
