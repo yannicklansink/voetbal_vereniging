@@ -15,6 +15,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -32,6 +33,7 @@ public class TrainingController {
     }
 
     @GetMapping(value = "/trainings")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<TrainingDto>> getAllTrainings() {
         List<TrainingDto> trainingDtos = service.getAllTrainings();
         if(trainingDtos.isEmpty()){
@@ -42,6 +44,7 @@ public class TrainingController {
     }
 
     @GetMapping(value = "/training/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<TrainingDto> getTrainingById(@PathVariable int id) {
         Optional<TrainingDto> trainingDto = service.getTrainingById(id);
         if (trainingDto.isEmpty()) {
@@ -51,6 +54,7 @@ public class TrainingController {
     }
 
     @PostMapping(value = "/training")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postTraining(@Valid @RequestBody TrainingDto trainingDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -62,6 +66,7 @@ public class TrainingController {
     }
 
     @PutMapping(value = "/training/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> putTrainingById(@Valid @RequestBody TrainingDto trainingDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -72,6 +77,7 @@ public class TrainingController {
     }
 
     @DeleteMapping(value = "/training/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<TrainingDto> deleteTraining(@PathVariable int id) {
         if (service.deleteTrainingById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

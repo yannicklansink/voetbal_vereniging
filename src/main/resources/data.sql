@@ -168,7 +168,11 @@ INSERT INTO users(username,password,enabled,email) VALUES
 ('yannick','$2a$10$C0oa49sVgc2lGmcXUHRGbueX0nT7f2tb1g4wWxdjCD2nukdCOwckW', true,'yannick@gmail.com'),
 ('sjoerd','$2a$10$C0oa49sVgc2lGmcXUHRGbueX0nT7f2tb1g4wWxdjCD2nukdCOwckW', true,'sjoerd@gmail.com');
 
-INSERT INTO authority(id,username,authority) VALUES
-                                                 (1, 'baian','ROLE_USER'),
-                                                 (2, 'yannick','ROLE_TRAINER'),
-                                                 (3, 'sjoerd','ROLE_CLUBEMPLOYEE');
+INSERT INTO authorities(username,authority, user_username) VALUES
+                                                 ('baian','ROLE_USER', 'baian'),
+
+                                                 ('yannick','ROLE_TRAINER', 'yannick'),
+                                                 ('yannick','ROLE_USER', 'yannick'),
+
+                                                 ('sjoerd','ROLE_TRAINER', 'sjoerd'),
+                                                 ('sjoerd','ROLE_USER', 'sjoerd');

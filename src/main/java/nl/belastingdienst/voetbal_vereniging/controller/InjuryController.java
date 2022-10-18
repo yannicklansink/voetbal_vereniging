@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -30,6 +31,7 @@ public class InjuryController {
     }
 
     @GetMapping(value = "/injuries")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<InjuryDto>> getAllInjuries() {
         List<InjuryDto> injuryDtos = service.getAllInjuries();
         if(injuryDtos.isEmpty()){
@@ -39,6 +41,7 @@ public class InjuryController {
     }
 
     @GetMapping(value = "/injury/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<InjuryDto> getInjuryById(@PathVariable int id) {
         Optional<InjuryDto> injuryDto = service.getInjuryById(id);
         if (injuryDto.isEmpty()) {
@@ -48,6 +51,7 @@ public class InjuryController {
     }
 
     @PostMapping(value = "/injury")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<String> postInjury(@Valid @RequestBody InjuryDto injuryDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -59,6 +63,7 @@ public class InjuryController {
     }
 
     @PutMapping(value = "/injury/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<String> putInjuryById(@Valid @RequestBody InjuryDto injuryDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -69,6 +74,7 @@ public class InjuryController {
     }
 
     @DeleteMapping(value = "/injury/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<InjuryDto> deleteInjury(@PathVariable int id) {
         if (service.deleteInjuryById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
