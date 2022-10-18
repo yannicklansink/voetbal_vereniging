@@ -43,17 +43,21 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
+        long validPeriod = 1000 * 60 * 60 * 24 * 365;   // 10 days in ms
+//        long validPeriod = 1000 * 60;   // 1 min
+        long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 10))
+                .setIssuedAt(new Date(currentTime))
+                .setExpiration(new Date(currentTime + validPeriod))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        System.out.println("username is: " + username);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 

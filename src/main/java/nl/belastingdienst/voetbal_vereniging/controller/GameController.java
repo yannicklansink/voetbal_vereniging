@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -30,6 +31,7 @@ public class GameController {
     }
 
     @GetMapping(value = "/games")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<GameDto>> getAllGames() {
         List<GameDto> gameDtos = service.getAllGames();
         if(gameDtos.isEmpty()){
@@ -39,6 +41,7 @@ public class GameController {
     }
 
     @GetMapping(value = "/game/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<GameDto> getGameById(@PathVariable int id) {
         Optional<GameDto> gameDto = service.getGameById(id);
         if (gameDto.isEmpty()) {
@@ -48,6 +51,7 @@ public class GameController {
     }
 
     @PostMapping(value = "/game")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postGame(@Valid @RequestBody GameDto gameDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -59,6 +63,7 @@ public class GameController {
     }
 
     @PutMapping(value = "/game/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> putGameById(@Valid @RequestBody GameDto gameDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -69,6 +74,7 @@ public class GameController {
     }
 
     @DeleteMapping(value = "/game/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<GameDto> deleteGame(@PathVariable int id) {
         if (service.deleteGameById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -6,6 +6,7 @@ import nl.belastingdienst.voetbal_vereniging.exception.ForeignKeyFoundException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,6 +30,11 @@ public class ExceptionController {
 
     @ExceptionHandler(value = BadTeamNameException.class)
     public ResponseEntity<Object> exception(BadTeamNameException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<Object> exception(AccessDeniedException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 

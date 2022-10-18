@@ -2,55 +2,36 @@ package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.AuthenticationRequest;
 import nl.belastingdienst.voetbal_vereniging.dto.AuthenticationResponse;
-import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
-import nl.belastingdienst.voetbal_vereniging.security.JwtUtil;
-import nl.belastingdienst.voetbal_vereniging.service.CustomUserDetailsService;
+import nl.belastingdienst.voetbal_vereniging.service.UserAuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
 
 @RestController
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    UserAuthenticateService userAuthenticateService;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    JwtUtil jwtUtl;
-
-    @GetMapping(value = "/authenticated")
-    public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
-        return ResponseEntity.ok().body(principal);
+    public AuthenticationController(UserAuthenticateService userAuthenticateService) {
+        this.userAuthenticateService = userAuthenticateService;
     }
 
-    // Authentication: is the user who he says he is
     @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequestDto) {
+        AuthenticationResponse authenticationResponseDto = userAuthenticateService.authenticateUser(authenticationRequestDto);
 
-        String username = authenticationRequest.getUsername();
-        String password = authenticationRequest.getPassword();
+        return ResponseEntity.ok(authenticationResponseDto);
+    }
 
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (BadCredentialsException ex) {
-            throw new BadRequestException("Incorrect username or password");
-        }
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        final String jwt = jwtUtl.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    @GetMapping(value = "/authenticated")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
+    public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
+        return ResponseEntity.ok().body(principal);
     }
 
 
