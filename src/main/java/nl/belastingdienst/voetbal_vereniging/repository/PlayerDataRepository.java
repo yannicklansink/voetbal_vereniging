@@ -26,6 +26,9 @@ public interface PlayerDataRepository extends JpaRepository<PlayerData, Integer>
     void deleteByPlayer(Player player);
 
 
+    /*
+    Returns a List of playerdata matched on position
+     */
     @Transactional
     @Modifying
     @Query(value = "select * from player_data p where p.position= ?1", nativeQuery = true)

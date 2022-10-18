@@ -5,11 +5,17 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Data
+
 public class AuthorityKey implements Serializable {
 
     private String username;
+
     private String authority;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, authority);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -20,8 +26,22 @@ public class AuthorityKey implements Serializable {
                 authority.equals(that.authority);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, authority);
+    public String getAuthority() {
+        return authority;
     }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+
+
 }

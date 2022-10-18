@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -32,6 +33,7 @@ public class PlayerController {
     }
 
     @GetMapping(value = "/players")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<DtoEntity>> getAllPlayers() {
         List<DtoEntity> playerDtos = service.getAllSpelers();
         if(playerDtos.isEmpty()){
@@ -41,6 +43,7 @@ public class PlayerController {
     }
 
     @GetMapping(value = "/player/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<PlayerDto> getPlayerById(@PathVariable int id) {
         Optional<PlayerDto> spelerDto = service.getPlayerDtoById(id);
         if (spelerDto.isEmpty()) {
@@ -53,6 +56,7 @@ public class PlayerController {
 
     // @Valid: When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
     @PostMapping(value = "/player")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postPlayer(@Valid @RequestBody PlayerDto playerDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -64,6 +68,7 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/player/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> putPlayerById(@Valid @RequestBody PlayerDto playerDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -74,6 +79,7 @@ public class PlayerController {
     }
 
     @DeleteMapping(value = "/player/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<PlayerDto> deletePlayer(@PathVariable int id) {
         if (service.deleteSpelerById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -16,7 +16,7 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_team")
     @SequenceGenerator(
             name = "seq_team",
-            initialValue = 6
+            initialValue = 7
     )
     private int id;
 

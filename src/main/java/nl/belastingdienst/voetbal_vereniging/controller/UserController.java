@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -28,16 +29,19 @@ public class UserController {
     }
 
     @GetMapping(value = "")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @GetMapping(value = "/{username}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> getUser(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getUser(username));
     }
 
     @PostMapping(value = "")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> createUser(@RequestBody UserPostRequestDto user) {
         String newUsername = userService.createUser(user);
 
@@ -51,23 +55,27 @@ public class UserController {
     }
 
     @PutMapping(value = "/{username}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> updateUser(@PathVariable("username") String username, @RequestBody User user) {
         userService.updateUser(username, user);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{username}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/{username}/authorities")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> getUserAuthorities(@PathVariable("username") String username) {
         return ResponseEntity.ok().body(userService.getAuthorities(username));
     }
 
     @PostMapping(value = "/{username}/authorities")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
         try {
             String authorityName = (String) fields.get("authority");
@@ -80,12 +88,14 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{username}/authorities/{authority}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
         userService.removeAuthority(username, authority);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/{username}/password")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<Object> setPassword(@PathVariable("username") String username, @RequestBody String password) {
         userService.setPassword(username, password);
         return ResponseEntity.noContent().build();

@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -30,6 +31,7 @@ public class RefereeController {
     }
 
     @GetMapping(value = "/referees")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<RefereeDto>> getAllReferees() {
         List<RefereeDto> refereeDtos = service.getAllReferees();
         if(refereeDtos.isEmpty()){
@@ -39,6 +41,7 @@ public class RefereeController {
     }
 
     @GetMapping(value = "/referee/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<RefereeDto> getRefereeById(@PathVariable int id) {
         Optional<RefereeDto> refereeDto = service.getRefereeById(id);
         if (refereeDto.isEmpty()) {
@@ -48,6 +51,7 @@ public class RefereeController {
     }
 
     @PostMapping(value = "/referee")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postReferee(@Valid @RequestBody RefereeDto refereeDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -59,6 +63,7 @@ public class RefereeController {
     }
 
     @PutMapping(value = "/referee/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> putRefereeById(@Valid @RequestBody RefereeDto refereeDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -69,6 +74,7 @@ public class RefereeController {
     }
 
     @DeleteMapping(value = "/referee/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<RefereeDto> deleteReferee(@PathVariable int id) {
         if (service.deleteRefereeById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -1,5 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,7 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "users")
 public class User {
 
@@ -18,10 +18,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String email;
+
     @Column(nullable = false)
     private boolean enabled = true;
-
-    private String email;
 
     @OneToMany(
             targetEntity = Authority.class,
@@ -29,27 +29,17 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"user"})
     private Set<Authority> authorities = new HashSet<>();
 
-    public Set<Authority> getAuthorities() { return authorities; }
-    public void setAuthorities(Set<Authority> authorities) { this.authorities = authorities; }
-
-    public void addAuthority(Authority authority) {
-        this.authorities.add(authority);
-    }
-    public void addAuthority(String authorityString) {
-        this.authorities.add(new Authority(this.username, authorityString));
-    }
-    public void removeAuthority(Authority authority) {
-        this.authorities.remove(authority);
-    }
     public void removeAuthority(String authorityString) {
         this.authorities.removeIf(authority -> authority.getAuthority().equalsIgnoreCase(authorityString));
     }
 
-    //Constructor is not necessary within Springboot
+    public void addAuthority(String authorityString) {
+        this.authorities.add(new Authority(this.username, authorityString));
+    }
 
-    //Getters and setters
     public String getUsername() {
         return username;
     }
@@ -66,14 +56,6 @@ public class User {
         this.password = password;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -82,4 +64,19 @@ public class User {
         this.email = email;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 }

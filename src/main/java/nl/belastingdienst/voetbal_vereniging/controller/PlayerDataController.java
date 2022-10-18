@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -29,6 +30,7 @@ public class PlayerDataController {
     }
 
     @GetMapping(value = "/players-data")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<PlayerDataDto>> getAllPlayersData() {
         List<PlayerDataDto> playerDataDtos = service.getAllPlayersData();
         if(playerDataDtos.isEmpty()){
@@ -38,6 +40,7 @@ public class PlayerDataController {
     }
 
     @GetMapping(value = "/player-data/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<PlayerDataDto> getPlayerDataById(@PathVariable int id) {
         Optional<PlayerDataDto> playerDataDto = service.getPlayerDataById(id);
         if (playerDataDto.isEmpty()) {
@@ -50,6 +53,7 @@ public class PlayerDataController {
     Get request to find a list of PlayerDataDtos that match a specific criteria from the @RequestBody
      */
     @GetMapping(value = "/trainer/players-scouting")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<List<PlayerDataDto>> getPlayersScouting(@RequestBody PlayerDataDto playerDataDto) {
 
         List<PlayerDataDto> playerDtos = service.getPlayersScoutingList(playerDataDto);
@@ -61,6 +65,7 @@ public class PlayerDataController {
     }
 
     @PostMapping(value = "/player-data")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postPlayerData(@Valid @RequestBody PlayerDataDto playerDataDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -72,6 +77,7 @@ public class PlayerDataController {
     }
 
     @PutMapping(value = "/player-data/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> putPlayerDataById(@Valid @RequestBody PlayerDataDto playerDataDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -82,6 +88,7 @@ public class PlayerDataController {
     }
 
     @DeleteMapping(value = "/player-data/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<PlayerDataDto> deletePlayerDataDto(@PathVariable int id) {
         if (service.deletePlayerDataById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

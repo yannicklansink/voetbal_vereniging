@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
 
 @RestController
@@ -22,13 +23,13 @@ public class AuthenticationController {
 
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequestDto) {
-
         AuthenticationResponse authenticationResponseDto = userAuthenticateService.authenticateUser(authenticationRequestDto);
 
         return ResponseEntity.ok(authenticationResponseDto);
     }
 
     @GetMapping(value = "/authenticated")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
         return ResponseEntity.ok().body(principal);
     }

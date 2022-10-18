@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -29,6 +30,7 @@ public class TeamController {
     }
 
     @GetMapping(value = "/teams")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<List<TeamPlayersDto>> getAllTeams() {
         List<TeamPlayersDto> teamPlayersDto = service.getAllTeams();
         if(teamPlayersDto.isEmpty()){
@@ -38,6 +40,7 @@ public class TeamController {
     }
 
     @GetMapping(value = "/team/{id}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     public ResponseEntity<TeamPlayersDto> getTeamById(@PathVariable int id) {
         Optional<TeamPlayersDto> teamPlayersDto = service.getTeamDtoById(id);
         if (teamPlayersDto.isEmpty()) {
@@ -47,6 +50,7 @@ public class TeamController {
     }
 
     @PostMapping(value = "/team")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postTeam(@Valid @RequestBody TeamPlayersDto teamPlayersDto, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -58,6 +62,7 @@ public class TeamController {
     }
 
     @PutMapping(value = "/team/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> putTeamById(@Valid @RequestBody TeamPlayersDto teamPlayersDto, @PathVariable int id, BindingResult br) {
         if(br.hasErrors()){
             return BindingResultValidation.fieldErrors(br);
@@ -68,6 +73,7 @@ public class TeamController {
     }
 
     @DeleteMapping(value = "/team/{id}")
+    @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<TeamPlayersDto> deleteTeam(@PathVariable int id) {
         if (service.deleteTeamById(id)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
