@@ -1,14 +1,12 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerDataRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
-import org.modelmapper.internal.asm.tree.TryCatchBlockNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

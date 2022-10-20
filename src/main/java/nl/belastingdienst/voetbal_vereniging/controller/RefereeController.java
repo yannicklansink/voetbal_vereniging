@@ -1,9 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.RefereeDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.service.RefereeService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
 import org.springframework.beans.factory.annotation.Autowired;

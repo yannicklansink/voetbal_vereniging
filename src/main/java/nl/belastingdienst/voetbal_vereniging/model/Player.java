@@ -1,7 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 

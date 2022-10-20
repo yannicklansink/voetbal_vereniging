@@ -1,9 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.GameDto;
-import nl.belastingdienst.voetbal_vereniging.dto.RefereeDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TeamPlayersDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Game;
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
@@ -13,7 +10,6 @@ import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

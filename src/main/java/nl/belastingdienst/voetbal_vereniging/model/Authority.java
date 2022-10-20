@@ -1,10 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.model.enumeration.EnumRole;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,7 +35,7 @@ public class Authority implements Serializable {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -47,19 +43,21 @@ public class Authority implements Serializable {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public String getAuthority() {
-        return authority;
-    }
-
     public void setAuthority(String authority) {
         this.authority = authority;
     }
+
+    public String getAuthority() {
+        return this.authority;
+    }
+
+
 
 }

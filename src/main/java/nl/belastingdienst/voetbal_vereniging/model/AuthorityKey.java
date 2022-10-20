@@ -1,6 +1,5 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,27 +17,30 @@ public class AuthorityKey implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AuthorityKey that = (AuthorityKey) o;
-        return username.equals(that.username) &&
-                authority.equals(that.authority);
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        AuthorityKey that = (AuthorityKey) object;
+        return this.username.equals(that.username) && authority.equals(that.authority);
     }
 
     public String getAuthority() {
-        return authority;
+        return this.authority;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setAuthority(String setAuthority) {
+        this.authority = setAuthority;
     }
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String setUsername) {
+        this.username = setUsername;
     }
 
 

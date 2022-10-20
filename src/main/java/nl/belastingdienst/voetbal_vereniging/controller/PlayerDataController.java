@@ -1,7 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.service.PlayerDataService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;

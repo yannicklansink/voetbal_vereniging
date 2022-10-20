@@ -1,7 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.repository;
 
 import nl.belastingdienst.voetbal_vereniging.model.Referee;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

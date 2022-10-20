@@ -1,6 +1,5 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
-import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
 import nl.belastingdienst.voetbal_vereniging.dto.TeamPlayersDto;
 import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.service.TeamService;

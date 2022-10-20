@@ -1,9 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.repository;
 
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
-import nl.belastingdienst.voetbal_vereniging.model.enumeration.Position;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,5 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

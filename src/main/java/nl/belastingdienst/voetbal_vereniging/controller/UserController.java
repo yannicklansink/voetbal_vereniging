@@ -13,7 +13,6 @@ import javax.annotation.security.RolesAllowed;
 import java.net.URI;
 import java.util.Map;
 
-//@CrossOrigin
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
