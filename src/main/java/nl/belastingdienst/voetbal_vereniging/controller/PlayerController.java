@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
+import nl.belastingdienst.voetbal_vereniging.dto.PlayerDataDto;
 import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.service.PlayerService;
@@ -85,6 +86,19 @@ public class PlayerController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /*
+    Delete multiple players when they are under a particular speed
+     */
+    @DeleteMapping(value = "/players-delete-on-speed")
+    @RolesAllowed({"ROLE_TRAINER"})
+    public ResponseEntity<String> deletePlayersBySpeed(@Valid @RequestBody PlayerDataDto playerDataDto, BindingResult br) {
+        if(br.hasErrors()){
+            return BindingResultValidation.fieldErrors(br);
+        }
+        service.deletePlayersBasedOnSpeed(playerDataDto);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
