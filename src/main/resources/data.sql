@@ -158,17 +158,12 @@ INSERT INTO player_data(id, player_id, height, weight, top_speed, prefered_foot,
 (43, 43, 186, 77.3, 29.8, 'RIGHT', 'RB', 73, 'TWO', 'TWO', 62, 86, 82),
 (44, 44, 188, 75.4, 34.5, 'RIGHT', 'CB', 71, 'TWO', 'TWO', 65, 75, 88);
 
---                            ('ROLE_PLAYER'),
---                            ('ROLE_TRAINER'),
---                            ('ROLE_CLUBEMPLOYEE');
-
-
 INSERT INTO users(username,password,enabled,email) VALUES
 ('baian','$2a$10$C0oa49sVgc2lGmcXUHRGbueX0nT7f2tb1g4wWxdjCD2nukdCOwckW', true,'baian@gmail.com'),  -- password: pass
 ('yannick','$2a$10$C0oa49sVgc2lGmcXUHRGbueX0nT7f2tb1g4wWxdjCD2nukdCOwckW', true,'yannick@gmail.com'),
 ('sjoerd','$2a$10$C0oa49sVgc2lGmcXUHRGbueX0nT7f2tb1g4wWxdjCD2nukdCOwckW', true,'sjoerd@gmail.com');
 
-INSERT INTO authorities(username,authority, user_username) VALUES
+INSERT INTO authorities(username, authority, user_username) VALUES
                                                  ('baian','ROLE_USER', 'baian'),
 
                                                  ('yannick','ROLE_TRAINER', 'yannick'),

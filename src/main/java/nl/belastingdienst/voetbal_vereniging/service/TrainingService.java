@@ -50,6 +50,16 @@ public class TrainingService {
         return newTraining;
     }
 
+    public List<TrainingDto> getTrainingsByTeamId(int teamid) {
+        List<Training> trainingList = repository.findAllByTeamId(teamid);
+        List<TrainingDto> trainingDtoList = new ArrayList<>();
+        for (Training training : trainingList) {
+            trainingDtoList.add(convertTrainingToDto(training));
+            System.out.println("team names: " + training.getTeam().getTeamName());
+        }
+        return trainingDtoList;
+    }
+
     public Training addNewTraining(TrainingDto trainingDto) {
         boolean checkIfIdOfTeamExists = false;
         if (trainingDto.getTeam() != null) {
@@ -119,5 +129,6 @@ public class TrainingService {
         newTraining.setId(training.getId());
         return newTraining;
     }
+
 
 }

@@ -53,6 +53,17 @@ public class TrainingController {
         return new ResponseEntity<>(trainingDto.get(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/trainings/{teamid}")
+    @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
+    public ResponseEntity<List<TrainingDto>> getTrainingsByTeamId(@PathVariable int teamid) {
+        List<TrainingDto> trainingDtoList = service.getTrainingsByTeamId(teamid);
+
+        if (trainingDtoList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(trainingDtoList, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/training")
     @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postTraining(@Valid @RequestBody TrainingDto trainingDto, BindingResult br) {

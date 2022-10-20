@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.*;
+import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
@@ -109,6 +110,16 @@ public class PlayerService {
             return true;
         }
         return false;
+    }
+
+    public void deletePlayersBasedOnSpeed(PlayerDataDto playerDataDto) {
+        double topSpeed = 100.0;
+        if (playerDataDto.getTopSpeed() > 20) {
+            topSpeed = playerDataDto.getTopSpeed();
+        } else {
+            throw new BadRequestException("Top speed must be higher then 20");
+        }
+        repository.deletePlayerBySpeed(topSpeed);
     }
 
     public void checkIfPlayerDtoHasPlayerData(PlayerDto playerDto, Player player) {

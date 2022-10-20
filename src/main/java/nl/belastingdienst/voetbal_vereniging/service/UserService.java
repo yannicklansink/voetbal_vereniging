@@ -1,40 +1,30 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
-import nl.belastingdienst.voetbal_vereniging.dto.UserDto;
 import nl.belastingdienst.voetbal_vereniging.dto.UserPostRequestDto;
 import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Authority;
 import nl.belastingdienst.voetbal_vereniging.model.User;
 import nl.belastingdienst.voetbal_vereniging.repository.UserRepository;
-import nl.belastingdienst.voetbal_vereniging.security.WebSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,15 +34,11 @@ public class UserService {
     }
 
     public Iterable<User> getUsers() {
-        return userRepository.findAll();
+        return repository.findAll();
     }
 
     public Optional<User> getUser(String username) {
-        return userRepository.findById(username);
-    }
-
-    public boolean userExists(String username) {
-        return userRepository.existsById(username);
+        return repository.findById(username);
     }
 
     public String createUser(UserPostRequestDto userPostRequest) {
@@ -75,7 +61,7 @@ public class UserService {
                 }
             }
 
-            User newUser = userRepository.save(user);
+            User newUser = repository.save(user);
             return newUser.getUsername();
         }
         catch (Exception ex) {
@@ -85,8 +71,8 @@ public class UserService {
     }
 
     public void deleteUser(String username) {
-        if (userRepository.existsById(username)) {
-            userRepository.deleteById(username);
+        if (repository.existsById(username)) {
+            repository.deleteById(username);
         }
         else {
             throw new RecordNotFoundException("User not found for: " + username);
@@ -94,7 +80,7 @@ public class UserService {
     }
 
     public void updateUser(String username, User newUser) {
-        Optional<User> userOptional = userRepository.findById(username);
+        Optional<User> userOptional = repository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException("User not found for: " + username);
         }
@@ -103,12 +89,12 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(newUser.getPassword()));
             user.setEmail(newUser.getEmail());
             user.setEnabled(newUser.isEnabled());
-            userRepository.save(user);
+            repository.save(user);
         }
     }
 
     public Set<Authority> getAuthorities(String username) {
-        Optional<User> userOptional = userRepository.findById(username);
+        Optional<User> userOptional = repository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException("User not found for: " + username);
         }
@@ -118,27 +104,26 @@ public class UserService {
         }
     }
 
-    public void addAuthority(String username, String authorityString) {
-        Optional<User> userOptional = userRepository.findById(username);
+    public void addAuthority(String username, String authority) {
+        Optional<User> userOptional = repository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException("User not found for: " + username);
-        }
-        else {
+        } else {
             User user = userOptional.get();
-            user.addAuthority(authorityString);
-            userRepository.save(user);
+            user.addAuthority(authority);
+            repository.save(user);
         }
     }
 
     public void removeAuthority(String username, String authorityString) {
-        Optional<User> userOptional = userRepository.findById(username);
+        Optional<User> userOptional = repository.findById(username);
         if (userOptional.isEmpty()) {
             throw new RecordNotFoundException("User not found for: " + username);
         }
         else {
             User user = userOptional.get();
             user.removeAuthority(authorityString);
-            userRepository.save(user);
+            repository.save(user);
         }
     }
 
@@ -163,28 +148,6 @@ public class UserService {
         if (countSpecial < MIN_SPECIAL) validPassword = false;
 
         return validPassword;
-    }
-
-    public void setPassword(String username, String password) {
-        if (username.equals(getCurrentUserName())) {
-            if (isValidPassword(password)) {
-                Optional<User> userOptional = userRepository.findById(username);
-                if (userOptional.isPresent()) {
-                    User user = userOptional.get();
-                    user.setPassword(passwordEncoder.encode(password));
-                    userRepository.save(user);
-                }
-                else {
-                    throw new RecordNotFoundException("User not found for: " + username);
-                }
-            }
-            else {
-                throw new BadRequestException("Password not correct");
-            }
-        }
-        else {
-            throw new BadRequestException("You have no authorization");
-        }
     }
 
 }
