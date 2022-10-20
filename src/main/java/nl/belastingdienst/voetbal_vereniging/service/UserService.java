@@ -9,55 +9,51 @@ import nl.belastingdienst.voetbal_vereniging.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UserService {
 
-    private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
+    private UserRepository repository;
+
+    private PasswordEncoder encoder;
 
     @Autowired
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, PasswordEncoder encoder) {
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
+        this.encoder = encoder;
     }
 
-    private String getCurrentUserName() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return ((UserDetails) authentication.getPrincipal()).getUsername();
+    public Optional<User> getUser(String user) {
+        return repository.findById(user);
     }
 
-    public Iterable<User> getUsers() {
+    public List<User> getUsers() {
         return repository.findAll();
     }
 
-    public Optional<User> getUser(String username) {
-        return repository.findById(username);
-    }
-
-    public String createUser(UserPostRequestDto userPostRequest) {
+    public String createUser(UserPostRequestDto userPost) {
         try {
-            String encryptedPassword = passwordEncoder.encode(userPostRequest.getPassword());
+            String newEncryptedPassword = encoder.encode(userPost.getPassword());
 
-            User user = new User();
-            user.setUsername(userPostRequest.getUsername());
-            user.setPassword(encryptedPassword);
-            user.setEmail(userPostRequest.getEmail());
-            user.setEnabled(true);
-            user.addAuthority("ROLE_USER");
-            for (String s : userPostRequest.getAuthorities()) {
-                if (!s.startsWith("ROLE_")) {
-                    s = "ROLE_" + s;
+            User user = new User(
+                    userPost.getUsername(),
+                    newEncryptedPassword,
+                    userPost.getEmail(),
+                    true,
+                    "ROLE_USER"
+            );
+
+            for (String authority : userPost.getAuthorities()) {
+                if (!authority.startsWith("ROLE_")) {
+                    authority = "ROLE_" + authority;
                 }
-                s = s.toUpperCase();
-                if (!s.equals("ROLE_USER")) {
-                    user.addAuthority(s);
+                authority = authority.toUpperCase();
+                if (!authority.equals("ROLE_USER")) {
+                    user.addAuthority(authority);
                 }
             }
 
@@ -65,89 +61,63 @@ public class UserService {
             return newUser.getUsername();
         }
         catch (Exception ex) {
-            throw new BadRequestException("Cannot create user.");
+            throw new BadRequestException("Cannot create your requested user.");
         }
 
     }
 
     public void deleteUser(String username) {
         if (repository.existsById(username)) {
+            // delete user when it exists
             repository.deleteById(username);
-        }
-        else {
+        } else {
             throw new RecordNotFoundException("User not found for: " + username);
         }
     }
 
-    public void updateUser(String username, User newUser) {
-        Optional<User> userOptional = repository.findById(username);
-        if (userOptional.isEmpty()) {
-            throw new RecordNotFoundException("User not found for: " + username);
-        }
-        else {
-            User user = userOptional.get();
-            user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-            user.setEmail(newUser.getEmail());
+    public void updateUser(String userName, User newUser) {
+        Optional<User> optionalUser = repository.findById(userName);
+        if (optionalUser.isEmpty()) {
+            throw new RecordNotFoundException("User not found for: " + userName);
+        } else {
+            User user = optionalUser.get();
+            user.setPassword(encoder.encode(newUser.getPassword()));
             user.setEnabled(newUser.isEnabled());
+            user.setEmail(newUser.getEmail());
             repository.save(user);
         }
     }
 
     public Set<Authority> getAuthorities(String username) {
-        Optional<User> userOptional = repository.findById(username);
-        if (userOptional.isEmpty()) {
-            throw new RecordNotFoundException("User not found for: " + username);
-        }
-        else {
-            User user = userOptional.get();
-            return user.getAuthorities();
-        }
-    }
-
-    public void addAuthority(String username, String authority) {
-        Optional<User> userOptional = repository.findById(username);
-        if (userOptional.isEmpty()) {
+        Optional<User> optionalUser = repository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException("User not found for: " + username);
         } else {
-            User user = userOptional.get();
-            user.addAuthority(authority);
-            repository.save(user);
+            User newUser = optionalUser.get();
+            return newUser.getAuthorities();
         }
     }
 
-    public void removeAuthority(String username, String authorityString) {
-        Optional<User> userOptional = repository.findById(username);
-        if (userOptional.isEmpty()) {
+    public void addAuthority(String username, String newAuthority) {
+        Optional<User> optionalUser= repository.findById(username);
+        if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException("User not found for: " + username);
-        }
-        else {
-            User user = userOptional.get();
-            user.removeAuthority(authorityString);
+        } else {
+            User user = optionalUser.get();
+            user.addAuthority(newAuthority);
             repository.save(user);
         }
     }
 
-    private boolean isValidPassword(String password) {
-        final int MIN_LENGTH = 8;
-        final int MIN_DIGITS = 1;
-        final int MIN_LOWER = 1;
-        final int MIN_UPPER = 1;
-        final int MIN_SPECIAL = 1;
-        final String SPECIAL_CHARS = "@#$%&*!()+=-_";
-
-        long countDigit = password.chars().filter(ch -> ch >= '0' && ch <= '9').count();
-        long countLower = password.chars().filter(ch -> ch >= 'a' && ch <= 'z').count();
-        long countUpper = password.chars().filter(ch -> ch >= 'A' && ch <= 'Z').count();
-        long countSpecial = password.chars().filter(ch -> SPECIAL_CHARS.indexOf(ch) >= 0).count();
-
-        boolean validPassword = true;
-        if (password.length() < MIN_LENGTH) validPassword = false;
-        if (countLower < MIN_LOWER) validPassword = false;
-        if (countUpper < MIN_UPPER) validPassword = false;
-        if (countDigit < MIN_DIGITS) validPassword = false;
-        if (countSpecial < MIN_SPECIAL) validPassword = false;
-
-        return validPassword;
+    public void removeAuthority(String username, String authorityToRemove) {
+        Optional<User> optionalUser = repository.findById(username);
+        if (optionalUser.isEmpty()) {
+            throw new RecordNotFoundException("User not found for: " + username);
+        } else {
+            User user = optionalUser.get();
+            user.removeAuthority(authorityToRemove);
+            repository.save(user);
+        }
     }
 
 }

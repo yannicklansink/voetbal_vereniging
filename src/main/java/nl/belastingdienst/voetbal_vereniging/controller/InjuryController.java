@@ -1,9 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import nl.belastingdienst.voetbal_vereniging.dto.InjuryDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.service.InjuryService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
 import org.springframework.beans.factory.annotation.Autowired;

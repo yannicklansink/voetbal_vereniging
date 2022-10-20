@@ -1,12 +1,8 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
-import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.dto.TrainingDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
-import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.Training;
-import nl.belastingdienst.voetbal_vereniging.repository.TeamRepository;
 import nl.belastingdienst.voetbal_vereniging.repository.TrainingRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;

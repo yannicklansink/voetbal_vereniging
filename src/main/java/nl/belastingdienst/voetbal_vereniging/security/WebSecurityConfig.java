@@ -2,9 +2,7 @@ package nl.belastingdienst.voetbal_vereniging.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,17 +18,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import static org.springframework.http.HttpMethod.*;
 
-//@Configuration
-//@EnableWebSecurity
-
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private DataSource dataSource;
+    private DataSource datasource;
 
     @Autowired
     @Lazy
@@ -43,17 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.jdbcAuthentication().dataSource(dataSource)
+        auth.jdbcAuthentication().dataSource(datasource)
                 .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username=?")
                 .authoritiesByUsernameQuery("SELECT username, authority FROM authorities AS a WHERE username=?");
-
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 
     @Bean
@@ -62,6 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.userDetailsServiceBean();
     }
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
@@ -69,7 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/authenticate").permitAll();
-//                .anyRequest().authenticated();
 
         http.exceptionHandling()
                 .authenticationEntryPoint(
@@ -82,31 +74,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 );
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-
-//        http
-//                .httpBasic()
-//                .and()
-//                .csrf().disable()
-//                .formLogin().disable()
-//                .authorizeRequests()
-//
-//
-////                .antMatchers("api/**").hasRole("TRAINER") // trainer will be able to perform CRUD operations on all endpoints after API
-//
-//                .antMatchers(GET, "api/games").hasRole("USER")
-//                .antMatchers(GET, "api/game").hasRole("USER")
-//                .antMatchers(POST, "api/game").hasRole("TRAINER")
-//
-//                .antMatchers("/authenticate").permitAll() // login
-//                .antMatchers("/users/**").hasRole("TRAINER") // everything users related needs to have TRAINER role
-//
-//
-//
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

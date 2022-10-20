@@ -6,6 +6,7 @@ import java.util.Set;
 
 @Data
 public class UserPostRequestDto {
+    // Class used to create a new user
 
     private String username;
     private String password;

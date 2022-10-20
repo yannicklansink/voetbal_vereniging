@@ -1,9 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
-import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
-import nl.belastingdienst.voetbal_vereniging.dto.PlayerDto;
 import nl.belastingdienst.voetbal_vereniging.dto.TrainingDto;
-import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.Training;
 import nl.belastingdienst.voetbal_vereniging.service.TrainingService;
 import nl.belastingdienst.voetbal_vereniging.util.BindingResultValidation;
@@ -11,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

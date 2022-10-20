@@ -3,7 +3,6 @@ package nl.belastingdienst.voetbal_vereniging.util;
 import nl.belastingdienst.voetbal_vereniging.dto.DtoEntity;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 
 public class DtoUtils {
 
@@ -14,7 +13,6 @@ public class DtoUtils {
     }
 
     public DtoEntity convertToDto(Object obj, DtoEntity mapper) {
-
         return modelMapper.map(obj, mapper.getClass());
     }
 

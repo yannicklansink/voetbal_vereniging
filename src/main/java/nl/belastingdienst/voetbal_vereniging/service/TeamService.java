@@ -1,9 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
-import nl.belastingdienst.voetbal_vereniging.dto.TeamDto;
 import nl.belastingdienst.voetbal_vereniging.dto.TeamPlayersDto;
 import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
-import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
 import nl.belastingdienst.voetbal_vereniging.exception.ForeignKeyFoundException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Team;

@@ -3,8 +3,6 @@ package nl.belastingdienst.voetbal_vereniging.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.model.Player;
-import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Foot;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Position;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Star;

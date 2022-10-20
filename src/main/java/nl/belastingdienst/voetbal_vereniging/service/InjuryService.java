@@ -1,10 +1,8 @@
 package nl.belastingdienst.voetbal_vereniging.service;
 
 import nl.belastingdienst.voetbal_vereniging.dto.InjuryDto;
-import nl.belastingdienst.voetbal_vereniging.dto.TrainerDto;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
 import nl.belastingdienst.voetbal_vereniging.model.Injury;
-import nl.belastingdienst.voetbal_vereniging.model.Trainer;
 import nl.belastingdienst.voetbal_vereniging.repository.InjuryRepository;
 import nl.belastingdienst.voetbal_vereniging.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;

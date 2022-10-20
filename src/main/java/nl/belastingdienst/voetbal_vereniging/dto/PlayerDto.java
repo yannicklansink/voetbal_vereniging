@@ -3,12 +3,9 @@ package nl.belastingdienst.voetbal_vereniging.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.belastingdienst.voetbal_vereniging.model.Injury;
-import nl.belastingdienst.voetbal_vereniging.model.Team;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Data

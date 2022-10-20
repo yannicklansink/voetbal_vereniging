@@ -1,7 +1,6 @@
 package nl.belastingdienst.voetbal_vereniging.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -31,6 +30,17 @@ public class User {
             fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"user"})
     private Set<Authority> authorities = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(String username, String newEncryptedPassword, String email, boolean b, String role_user) {
+        this.username = username;
+        this.password = newEncryptedPassword;
+        this.email = email;
+        this.enabled = b;
+        addAuthority(role_user);
+    }
 
     public void removeAuthority(String authorityString) {
         this.authorities.removeIf(authority -> authority.getAuthority().equalsIgnoreCase(authorityString));
