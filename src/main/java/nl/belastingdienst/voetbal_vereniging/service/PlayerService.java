@@ -137,8 +137,6 @@ public class PlayerService {
 
         if (player.getInjury() != null) {
             for (Injury injury : player.getInjury()) {
-                System.out.println("updating injury for player: ");
-                System.out.println("player id: " + player.getPlayerId());
                 injury.setPlayer(player);
                 injuryService.updateInjury(injury);
             }

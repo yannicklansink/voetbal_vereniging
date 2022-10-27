@@ -51,9 +51,8 @@ public class InjuryService {
         if (checkIfIdExists(id)) {
             Injury updatedInjury = convertDtoToExistingInjury(injuryDto, repository.findById(id).get());
             repository.save(updatedInjury);
-            return true;
         }
-        return false;
+        return true;
     }
 
     public void updateInjury(Injury injury) {
@@ -63,9 +62,8 @@ public class InjuryService {
     public boolean deleteInjuryById(int id) {
         if (checkIfIdExists(id)) {
             repository.deleteById(id);
-            return true;
         }
-        return false;
+        return true;
     }
 
     /*
@@ -81,11 +79,11 @@ public class InjuryService {
     }
 
     // Convert DTOs and Entities methodes
-    private InjuryDto convertInjuryToDto(Injury injury) {
+    public InjuryDto convertInjuryToDto(Injury injury) {
         return (InjuryDto) new DtoUtils().convertToDto(injury, new InjuryDto());
     }
 
-    private Optional<InjuryDto> convertInjuryToDto(Optional<Injury> injury) {
+    public Optional<InjuryDto> convertInjuryToDto(Optional<Injury> injury) {
         InjuryDto injuryDto = (InjuryDto) new DtoUtils().convertToDto(injury.get(), new InjuryDto());
         return Optional.of(injuryDto);
     }
@@ -94,7 +92,7 @@ public class InjuryService {
         return (Injury) new DtoUtils().convertToEntity(new Injury(), injuryDto);
     }
 
-    private Injury convertDtoToExistingInjury(InjuryDto injuryDto, Injury injury) {
+    public Injury convertDtoToExistingInjury(InjuryDto injuryDto, Injury injury) {
         Injury newInjury = convertDtoToInjury(injuryDto);
         newInjury.setId(injury.getId());
         return newInjury;
