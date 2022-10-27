@@ -5,6 +5,7 @@ import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.model.Player;
 import nl.belastingdienst.voetbal_vereniging.model.PlayerData;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Foot;
+import nl.belastingdienst.voetbal_vereniging.model.enumeration.Gender;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Position;
 import nl.belastingdienst.voetbal_vereniging.model.enumeration.Star;
 import nl.belastingdienst.voetbal_vereniging.repository.PlayerDataRepository;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.security.core.parameters.P;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

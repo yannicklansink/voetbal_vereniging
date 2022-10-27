@@ -88,9 +88,7 @@ public class PlayerDataService {
         if (checkIfIdExists(id)) {
             PlayerData updatedPlayerData = convertDtoToExistingPlayerData(playerDataDto, repository.findById(id).get());
             Optional<Player> player = playerService.getPlayerById(id);
-            if (player.isPresent()) {
-                updatedPlayerData.setPlayer(player.get());
-            }
+            if (player.isPresent()) { updatedPlayerData.setPlayer(player.get());}
             repository.save(updatedPlayerData);
         }
         return true;
