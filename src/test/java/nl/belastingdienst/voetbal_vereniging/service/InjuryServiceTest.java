@@ -63,14 +63,11 @@ public class InjuryServiceTest {
         injuryDtoList.add(injuryDto2);
     }
 
-    // doet het
     @Test
-    void getOneInjuryByIdException() {
+    public void getOneInjuryByIdException() {
         assertThrows(RecordNotFoundException.class, () -> injuryService.getInjuryById(100));
     }
 
-
-    // doet het
     @Test
     public void getAllInjuries() {
         // arrange
