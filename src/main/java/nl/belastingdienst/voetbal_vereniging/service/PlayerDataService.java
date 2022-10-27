@@ -92,17 +92,15 @@ public class PlayerDataService {
                 updatedPlayerData.setPlayer(player.get());
             }
             repository.save(updatedPlayerData);
-            return true;
         }
-        return false;
+        return true;
     }
 
     public boolean deletePlayerDataById(int id) {
         if (checkIfIdExists(id)) {
             repository.delete(id);
-            return true;
         }
-        return false;
+        return true;
     }
 
     /*
@@ -118,11 +116,11 @@ public class PlayerDataService {
     }
 
     // Convert DTOs and Entities methodes
-    private PlayerDataDto convertPlayerDataToDto(PlayerData playerData) {
+    public PlayerDataDto convertPlayerDataToDto(PlayerData playerData) {
         return (PlayerDataDto) new DtoUtils().convertToDto(playerData, new PlayerDataDto());
     }
 
-    private Optional<PlayerDataDto> convertPlayerDataToDto(Optional<PlayerData> playerData) {
+    public Optional<PlayerDataDto> convertPlayerDataToDto(Optional<PlayerData> playerData) {
         PlayerDataDto playerDataDto = (PlayerDataDto) new DtoUtils().convertToDto(playerData.get(), new PlayerDataDto());
         return Optional.of(playerDataDto);
     }
@@ -131,7 +129,7 @@ public class PlayerDataService {
         return (PlayerData) new DtoUtils().convertToEntity(new PlayerData(), playerDataDto);
     }
 
-    private PlayerData convertDtoToExistingPlayerData(PlayerDataDto playerDataDto, PlayerData playerData) {
+    public PlayerData convertDtoToExistingPlayerData(PlayerDataDto playerDataDto, PlayerData playerData) {
         PlayerData newPlayerData = convertDtoToPlayerData(playerDataDto);
         newPlayerData.setId(playerData.getId());
         return newPlayerData;
