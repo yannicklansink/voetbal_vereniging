@@ -109,15 +109,4 @@ public class UserService {
         }
     }
 
-    public void removeAuthority(String username, String authorityToRemove) {
-        Optional<User> optionalUser = repository.findById(username);
-        if (optionalUser.isEmpty()) {
-            throw new RecordNotFoundException("User not found for: " + username);
-        } else {
-            User user = optionalUser.get();
-            user.removeAuthority(authorityToRemove);
-            repository.save(user);
-        }
-    }
-
 }

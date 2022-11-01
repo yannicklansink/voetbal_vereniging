@@ -81,12 +81,5 @@ public class UserController {
         }
     }
 
-    @DeleteMapping(value = "/{username}/authorities/{authority}")
-    @RolesAllowed({"ROLE_TRAINER"})
-    public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
-        service.removeAuthority(username, authority);
-        return ResponseEntity.noContent().build();
-    }
-
 
 }
