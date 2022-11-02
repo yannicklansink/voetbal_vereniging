@@ -1,9 +1,11 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
 import nl.belastingdienst.voetbal_vereniging.exception.ForeignKeyFoundException;
 import nl.belastingdienst.voetbal_vereniging.exception.RecordNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -42,7 +44,11 @@ public class ExceptionController {
     public ResponseEntity<Object> exception(RuntimeException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
-
+    
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    public ResponseEntity<Object> exception(DataIntegrityViolationException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
 
 }
