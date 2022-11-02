@@ -40,6 +40,11 @@ public class ExceptionController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<Object> exception(RuntimeException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     public ResponseEntity<Object> exception(DataIntegrityViolationException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
