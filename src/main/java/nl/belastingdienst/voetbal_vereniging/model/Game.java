@@ -28,10 +28,6 @@ public class Game {
     @NotBlank(message = "Opponent is mandatory")
     private String opponent;
 
-//    @ManyToOne
-//    @JoinColumn(name = "trainer_id")
-//    private Trainer trainer;
-
     @ManyToOne
     @JoinColumn(name = "referee_id")
     private Referee referee;

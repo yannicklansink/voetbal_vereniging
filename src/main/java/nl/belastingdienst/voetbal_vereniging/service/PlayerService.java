@@ -91,7 +91,6 @@ public class PlayerService {
             if (playerDto.getInjury() != null) {
                 for (InjuryDto injuryDto : playerDto.getInjury()) {
                     Injury newInjury = InjuryService.convertDtoToInjury(injuryDto);
-//                injuryRepository.delete(newInjury.getId()); // heeft nog geen id
                     updatedPlayer.addInjury(newInjury);
                     checkIfPlayerDtoHasInjury(updatedPlayer);
                 }
@@ -123,8 +122,8 @@ public class PlayerService {
 
     public void checkIfPlayerDtoHasPlayerData(PlayerDto playerDto, Player player) {
         if (playerDto.getPlayerData() != null) {
-            playerDataRepository.delete(player.getPlayerData().getId()); // delete the double inserted playerdata
-            playerDataRepository.deleteByPlayer(player); // delete old playerdata
+            playerDataRepository.delete(player.getPlayerData().getId());
+            playerDataRepository.deleteByPlayer(player);
 
 
             PlayerData playerData = PlayerDataService.convertDtoToPlayerData(playerDto.getPlayerData());

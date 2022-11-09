@@ -1,6 +1,7 @@
 package nl.belastingdienst.voetbal_vereniging.controller;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import nl.belastingdienst.voetbal_vereniging.exception.BadRequestException;
 import nl.belastingdienst.voetbal_vereniging.exception.BadTeamNameException;
 import nl.belastingdienst.voetbal_vereniging.exception.ForeignKeyFoundException;
@@ -49,6 +50,7 @@ public class ExceptionController {
     public ResponseEntity<Object> exception(DataIntegrityViolationException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
 
 
 }

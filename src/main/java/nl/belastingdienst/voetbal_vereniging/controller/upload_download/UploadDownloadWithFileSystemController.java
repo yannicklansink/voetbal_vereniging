@@ -35,14 +35,12 @@ public class UploadDownloadWithFileSystemController {
         this.databaseService = databaseService;
     }
 
-    //    post for single upload
     @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     @PostMapping("single/upload")
     public FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file){
 
         String fileName = fileStorageService.storeFile(file);
 
-        // next line makes url. example "http://localhost:8080/download/naam.jpg"
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(fileName).toUriString();
 
         String contentType = file.getContentType();
@@ -50,7 +48,6 @@ public class UploadDownloadWithFileSystemController {
         return new FileUploadResponse(fileName, contentType, url );
     }
 
-    //    get for single download
     @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     @GetMapping("/download/{fileName}")
     ResponseEntity<Resource> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
@@ -65,14 +62,12 @@ public class UploadDownloadWithFileSystemController {
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + resource.getFilename()).body(resource);
     }
 
-    //    get all names in directory
     @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     @GetMapping("/download/allNames")
     List<String> downLoadMultipleFile() {
         return fileStorageService.downLoad();
     }
 
-    //    post for multiple uploads
     @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     @PostMapping("/multiple/upload")
     List<FileUploadResponse> multipleUpload(@RequestParam("files") MultipartFile[] files) {
@@ -83,7 +78,6 @@ public class UploadDownloadWithFileSystemController {
         Arrays.stream(files).forEach(file -> {
             String fileName = fileStorageService.storeFile(file);
 
-            // next line makes url. example "http://localhost:8080/download/naam.jpg"
             String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(fileName).toUriString();
 
             String contentType = file.getContentType();

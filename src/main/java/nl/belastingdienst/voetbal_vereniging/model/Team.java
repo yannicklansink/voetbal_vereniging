@@ -38,8 +38,4 @@ public class Team {
         this.teamName = teamName;
     }
 
-//    @Override
-//    public String toString() {
-//        return teamName;
-//    }
 }

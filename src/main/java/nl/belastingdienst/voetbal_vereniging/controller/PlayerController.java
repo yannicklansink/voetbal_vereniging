@@ -55,7 +55,6 @@ public class PlayerController {
 
 
 
-    // @Valid: When the target argument fails to pass the validation, Spring Boot throws a MethodArgumentNotValidException exception.
     @PostMapping(value = "/player")
     @RolesAllowed({"ROLE_TRAINER"})
     public ResponseEntity<String> postPlayer(@Valid @RequestBody PlayerDto playerDto, BindingResult br) {

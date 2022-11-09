@@ -15,7 +15,6 @@ public class TrainingDto implements DtoEntity{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-//    @JsonIncludeProperties(value = "teamName")
     private TeamDto team;
 
 
