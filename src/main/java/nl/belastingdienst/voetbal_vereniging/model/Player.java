@@ -41,8 +41,6 @@ public class Player {
     private Gender gender;
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    @PrimaryKeyJoinColumn
     private PlayerData playerData;
 
     @ManyToOne

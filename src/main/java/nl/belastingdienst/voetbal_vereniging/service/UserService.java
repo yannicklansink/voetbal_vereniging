@@ -68,7 +68,6 @@ public class UserService {
 
     public void deleteUser(String username) {
         if (repository.existsById(username)) {
-            // delete user when it exists
             repository.deleteById(username);
         } else {
             throw new RecordNotFoundException("User not found for: " + username);

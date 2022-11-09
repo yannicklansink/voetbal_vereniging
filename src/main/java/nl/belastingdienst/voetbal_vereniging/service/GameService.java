@@ -52,7 +52,6 @@ public class GameService {
     }
 
     public Game addNewGame(GameDto gameDto) {
-        // check name van referee
         Optional<Referee> referee = Optional.empty();
         if (gameDto.getReferee() != null && gameDto.getReferee().getRefereeName() != null) {
             String refereeName = gameDto.getReferee().getRefereeName(); // this can be null
@@ -60,7 +59,6 @@ public class GameService {
             referee = refereeService.getRefereeDtoById(refereeId);
         }
 
-        // check name van team
         Optional<Team> team = Optional.empty();
         if (gameDto.getTeam() != null && gameDto.getTeam().getTeamName() != null) {
             String teamName = gameDto.getTeam().getTeamName();
@@ -81,7 +79,6 @@ public class GameService {
     public boolean updateGameById(GameDto gameDto, int id) {
         if (checkIfIdExists(id)) {
 
-            // check name van referee
             Optional<Referee> referee = Optional.empty();
             if (gameDto.getReferee() != null && gameDto.getReferee().getRefereeName() != null) {
                 String refereeName = gameDto.getReferee().getRefereeName(); // this can be null
@@ -89,7 +86,6 @@ public class GameService {
                 referee = refereeService.getRefereeDtoById(refereeId);
             }
 
-            // check name van team
             Optional<Team> team = Optional.empty();
             if (gameDto.getTeam() != null && gameDto.getTeam().getTeamName() != null) {
                 String teamName = gameDto.getTeam().getTeamName();
@@ -97,7 +93,6 @@ public class GameService {
                 team = teamService.getTeamById(teamNameId);
 
             }
-//            Game game = convertDtoToGame(gameDto);
             Game updatedGame = convertDtoToExistingGame(gameDto, repository.findById(id).get());
 
             if (referee.isPresent() && team.isPresent()) {

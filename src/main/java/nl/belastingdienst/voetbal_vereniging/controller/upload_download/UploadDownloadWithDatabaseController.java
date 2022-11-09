@@ -12,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
@@ -37,14 +36,12 @@ public class UploadDownloadWithDatabaseController {
         return new FileUploadResponse(fileDocument.getFileName(), url, contentType );
     }
 
-    //    get for single download
     @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     @GetMapping("/downloadFromDB/{fileName}")
     ResponseEntity<byte[]> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
         return databaseService.singleFileDownload(fileName, request);
     }
 
-    //    post for multiple uploads to database
     @RolesAllowed({"ROLE_USER", "ROLE_TRAINER"})
     @PostMapping("/multiple/upload/db")
     List<FileUploadResponse> multipleUpload(@RequestParam("files") MultipartFile [] files) {

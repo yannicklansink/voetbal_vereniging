@@ -94,7 +94,6 @@ public class TeamService {
     private TeamPlayersDto convertTeamToDto(Team team) {
         TeamPlayersDto returnTeamDto = (TeamPlayersDto) new DtoUtils().convertToDto(team, new TeamPlayersDto());
         return returnTeamDto;
-//        return (TeamDto) new DtoUtils().convertToDto(team, new TeamDto());
     }
 
     private Optional<TeamPlayersDto> convertTeamToDto(Optional<Team> team) {

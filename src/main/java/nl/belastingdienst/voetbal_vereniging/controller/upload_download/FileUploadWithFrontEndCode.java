@@ -6,8 +6,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FileUploadWithFrontEndCode {
-
-    // Make sure you have access in your browser
     @GetMapping("/files")
     ModelAndView fileUpload(){
         return new ModelAndView("index.html");
